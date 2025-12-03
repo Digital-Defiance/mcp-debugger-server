@@ -1,6 +1,7 @@
 # MCP Debugger Server
 
 [![NPM Version](https://img.shields.io/npm/v/@ai-capabilities-suite/mcp-debugger-server)](https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server)
+[![GitHub Release](https://img.shields.io/github/v/release/digital-defiance/mcp-debugger-server?label=Release&logo=github)](https://github.com/digital-defiance/mcp-debugger-server/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/digidefiance/mcp-debugger-server)](https://hub.docker.com/r/digidefiance/mcp-debugger-server)
