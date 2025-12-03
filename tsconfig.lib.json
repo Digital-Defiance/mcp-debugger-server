@@ -14,8 +14,8 @@
       "node"
     ],
     "paths": {
-      "@ai-capabilities-suite/mcp-core": [
-        "../debugger-core/dist/index.d.ts"
+      "@ai-capabilities-suite/mcp-debugger-core": [
+        "../mcp-debugger-core/dist/index.d.ts"
       ]
     }
   },

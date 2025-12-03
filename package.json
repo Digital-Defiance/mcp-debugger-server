@@ -53,6 +53,8 @@
     "!**/*.test.js"
   ],
   "scripts": {
+    "build": "npx tsc -p tsconfig.lib.json",
+    "test": "npx jest",
     "publish:public": "npm publish --access public"
   },
   "keywords": [
@@ -188,8 +190,8 @@
     "tslib": "^2.3.0",
     "zod": "^4.1.13"
   },
-  "peerDependencies": {
-    "node": ">=18.0.0"
+  "devDependencies": {
+    "typescript": "^5.3.3"
   },
   "type": "commonjs"
 }
