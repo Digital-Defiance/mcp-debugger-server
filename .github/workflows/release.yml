@@ -42,8 +42,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Bump version
         run: |
@@ -51,10 +54,10 @@ jobs:
           echo "NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
       - name: Build
-        run: npm run build
+        run: yarn build
 
       - name: Test
-        run: npm test
+        run: yarn test
         env:
           CI: true
 

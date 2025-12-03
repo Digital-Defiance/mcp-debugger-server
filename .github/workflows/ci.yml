@@ -25,18 +25,21 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Lint
-        run: npm run lint
+        run: yarn lint
         continue-on-error: true
 
       - name: Build
-        run: npm run build
+        run: yarn build
 
       - name: Test
-        run: npm test
+        run: yarn test
         env:
           CI: true
 
@@ -62,11 +65,14 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Build
-        run: npm run build
+        run: yarn build
 
       - name: Check for build artifacts
         run: |

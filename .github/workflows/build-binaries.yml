@@ -48,8 +48,9 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          npm ci
-          npm run build
+          corepack enable
+          yarn install --frozen-lockfile
+          yarn build
 
       - name: Create binaries directory
         run: mkdir -p binaries
