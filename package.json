@@ -52,6 +52,9 @@
     "!**/*.spec.js",
     "!**/*.test.js"
   ],
+  "scripts": {
+    "publish:public": "npm publish --access public"
+  },
   "keywords": [
     "mcp",
     "mcp-server",
