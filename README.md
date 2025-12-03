@@ -5,6 +5,12 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/digidefiance/mcp-debugger-server)](https://hub.docker.com/r/digidefiance/mcp-debugger-server)
 
+## 🔗 Repository
+
+This package is now maintained in its own repository: **[https://github.com/Digital-Defiance/mcp-debugger-server](https://github.com/Digital-Defiance/mcp-debugger-server)**
+
+This repository is part of the [https://github.com/Digital-Defiance/ai-capabilitites-suite](AI Capabilitites Suite) on GitHub.
+
 An enterprise-grade Model Context Protocol (MCP) server that provides comprehensive debugging capabilities for Node.js and TypeScript applications. This server enables AI agents (Kiro, Amazon Q, GitHub Copilot) to interactively debug code with 25+ specialized tools, offering everything from basic breakpoint management to advanced CPU/memory profiling and hang detection.
 
 ## 🎯 Key Features
