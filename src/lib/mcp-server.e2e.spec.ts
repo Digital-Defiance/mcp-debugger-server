@@ -1,5 +1,37 @@
 import { spawn, ChildProcess } from "child_process";
 import * as path from "path";
+import * as fs from "fs";
+
+// Test fixtures are in mcp-debugger-core package  
+// From src/lib (when running tests), go up to src, then package root, then workspace root, then to mcp-debugger-core
+// Find test fixtures directory - works in monorepo, standalone repo, and CI
+const findTestFixturesDir = (startDir: string): string => {
+  let currentDir = startDir;
+  
+  // Try local test-fixtures first (standalone repo)
+  while (currentDir !== path.dirname(currentDir)) {
+    const localPath = path.join(currentDir, 'test-fixtures');
+    if (fs.existsSync(localPath)) {
+      return localPath;
+    }
+    currentDir = path.dirname(currentDir);
+  }
+  
+  // Try monorepo structure (packages/mcp-debugger-core/test-fixtures)
+  currentDir = startDir;
+  while (currentDir !== path.dirname(currentDir)) {
+    const monorepoPath = path.join(currentDir, 'packages/mcp-debugger-core/test-fixtures');
+    if (fs.existsSync(monorepoPath)) {
+      return monorepoPath;
+    }
+    currentDir = path.dirname(currentDir);
+  }
+  
+  throw new Error(`Test fixtures not found. Searched from: ${startDir}`);
+};
+
+const TEST_FIXTURES_DIR = findTestFixturesDir(__dirname);
+console.log('[E2E Test] Using test fixtures from:', TEST_FIXTURES_DIR)
 
 /**
  * End-to-End tests for MCP Debugger Server
@@ -127,7 +159,7 @@ describe("MCP Debugger Server - E2E", () => {
         for (const line of lines) {
           if (line.trim()) {
             try {
-              const response = JSON.parse(line);
+              const response = safeParseResponse(line);
               if (response.id === id) {
                 console.log(`[Test] Got response for request ${id}`);
                 clearTimeout(timeout);
@@ -152,6 +184,26 @@ describe("MCP Debugger Server - E2E", () => {
       console.log(`[Test] Sending request ${id}:`, method);
       serverProcess.stdin?.write(JSON.stringify(request) + "\n");
     });
+  }
+
+  /**
+   * Safely parse response text that might be JSON or plain text error
+   */
+  function safeParseResponse(text: string): any {
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      // If it's a plain text error (e.g., "MCP error -32602: ..."), wrap it
+      if (text.startsWith("MCP error")) {
+        return {
+          status: "error",
+          code: "MCP_ERROR",
+          message: text,
+        };
+      }
+      // Re-throw if it's not a recognized error format
+      throw e;
+    }
   }
 
   /**
@@ -245,9 +297,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should detect a hanging process", async () => {
-      const testFile = path.join(
-        __dirname,
-        "../../../mcp-debugger-core/test-fixtures/infinite-loop.js"
+      const testFile = path.join(TEST_FIXTURES_DIR, "infinite-loop.js"
       );
 
       const result = await sendRequest(
@@ -271,7 +321,7 @@ describe("MCP Debugger Server - E2E", () => {
       const textContent = result.content.find((c: any) => c.type === "text");
       expect(textContent).toBeDefined();
 
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
       if (response.status === "error") {
         console.error("Error response:", response);
       }
@@ -281,9 +331,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should detect normal completion", async () => {
-      const testFile = path.join(
-        __dirname,
-        "../../../mcp-debugger-core/test-fixtures/slow-completion.js"
+      const testFile = path.join(TEST_FIXTURES_DIR, "slow-completion.js"
       );
 
       const result = await sendRequest(
@@ -301,7 +349,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.hung).toBe(false);
@@ -316,9 +364,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should start a debug session", async () => {
-      const testFile = path.join(
-        __dirname,
-        "../../../mcp-debugger-core/test-fixtures/simple-script.js"
+      const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js"
       );
 
       const result = await sendRequest("tools/call", {
@@ -332,7 +378,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "error") {
         console.log("Error starting debug session:", response);
@@ -347,9 +393,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Tool Execution - Session Operations", () => {
     let sessionId: string;
-    const testFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/step-test-simple.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "step-test-simple.js"
     );
 
     beforeAll(async () => {
@@ -367,7 +411,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
       sessionId = response.sessionId;
 
       // Set a breakpoint at line 3
@@ -388,8 +432,9 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      // Wait for breakpoint to be hit
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Wait for breakpoint to be hit (longer on Windows)
+      const waitTime = process.platform === 'win32' ? 2000 : 500;
+      await new Promise((resolve) => setTimeout(resolve, waitTime));
     }, 60000);
 
     it("should set a breakpoint", async () => {
@@ -404,7 +449,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.breakpointId).toBeDefined();
@@ -422,13 +467,14 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.state).toBeDefined();
 
-      // Wait for the process to hit the next breakpoint
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Wait for the process to hit the next breakpoint (longer on Windows)
+      const breakpointWait = process.platform === 'win32' ? 1500 : 500;
+      await new Promise((resolve) => setTimeout(resolve, breakpointWait));
     }, 60000);
 
     it("should step over", async () => {
@@ -441,7 +487,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "error") {
         console.error("Step over error:", response);
@@ -465,7 +511,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "error") {
         console.error("Inspect error:", response);
@@ -486,7 +532,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "error") {
         console.error("Get stack error:", response);
@@ -519,9 +565,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Step Operations - Requirements 2.4, 2.5, 2.6", () => {
     let sessionId: string;
-    const testFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/step-test.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js"
     );
 
     beforeAll(async () => {
@@ -539,7 +583,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
       sessionId = response.sessionId;
 
       // Continue to first debugger statement
@@ -550,8 +594,9 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      // Wait for debugger statement to be hit
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Wait for debugger statement to be hit (longer on Windows)
+      const debuggerWait = process.platform === 'win32' ? 1500 : 500;
+      await new Promise((resolve) => setTimeout(resolve, debuggerWait));
     }, 60000);
 
     it("should step into a function call", async () => {
@@ -576,7 +621,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "success") {
         expect(response.state).toBe("paused");
@@ -601,7 +646,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "success") {
         expect(response.state).toBe("paused");
@@ -634,7 +679,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       // Pause may not always succeed if process completes quickly
       if (response.status === "success") {
@@ -657,7 +702,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const stack1 = JSON.parse(
+      const stack1 = safeParseResponse(
         stackResult1.content.find((c: any) => c.type === "text").text
       );
 
@@ -677,7 +722,7 @@ describe("MCP Debugger Server - E2E", () => {
           arguments: { sessionId },
         });
 
-        const stack2 = JSON.parse(
+        const stack2 = safeParseResponse(
           stackResult2.content.find((c: any) => c.type === "text").text
         );
 
@@ -705,9 +750,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Breakpoint Management - Requirements 1.2, 1.3, 1.4, 1.5", () => {
     let sessionId: string;
-    const testFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/conditional-test.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "conditional-test.js"
     );
 
     beforeAll(async () => {
@@ -725,7 +768,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
       sessionId = response.sessionId;
     }, 60000);
 
@@ -757,7 +800,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.breakpoints).toBeDefined();
@@ -779,7 +822,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const list1 = JSON.parse(
+      const list1 = safeParseResponse(
         listResult1.content.find((c: any) => c.type === "text").text
       );
       const initialCount = list1.breakpoints.length;
@@ -794,7 +837,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const removeResponse = JSON.parse(
+      const removeResponse = safeParseResponse(
         removeResult.content.find((c: any) => c.type === "text").text
       );
       expect(removeResponse.status).toBe("success");
@@ -805,7 +848,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const list2 = JSON.parse(
+      const list2 = safeParseResponse(
         listResult2.content.find((c: any) => c.type === "text").text
       );
       expect(list2.breakpoints.length).toBe(initialCount - 1);
@@ -821,7 +864,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const list = JSON.parse(
+      const list = safeParseResponse(
         listResult.content.find((c: any) => c.type === "text").text
       );
       const breakpoint = list.breakpoints[0];
@@ -836,7 +879,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const toggleResponse = JSON.parse(
+      const toggleResponse = safeParseResponse(
         toggleResult.content.find((c: any) => c.type === "text").text
       );
       expect(toggleResponse.status).toBe("success");
@@ -848,7 +891,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const list2 = JSON.parse(
+      const list2 = safeParseResponse(
         listResult2.content.find((c: any) => c.type === "text").text
       );
       const updatedBreakpoint = list2.breakpoints.find(
@@ -871,7 +914,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.breakpointId).toBeDefined();
@@ -893,7 +936,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const inspectResponse = JSON.parse(
+      const inspectResponse = safeParseResponse(
         inspectResult.content.find((c: any) => c.type === "text").text
       );
       if (inspectResponse.status === "success") {
@@ -908,7 +951,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const list1 = JSON.parse(
+      const list1 = safeParseResponse(
         listResult1.content.find((c: any) => c.type === "text").text
       );
 
@@ -922,7 +965,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const addResponse = JSON.parse(
+      const addResponse = safeParseResponse(
         addResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -932,7 +975,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const list2 = JSON.parse(
+      const list2 = safeParseResponse(
         listResult2.content.find((c: any) => c.type === "text").text
       );
 
@@ -959,9 +1002,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Variable Inspection - Requirements 3.1, 3.2, 3.3, 9.3", () => {
     let sessionId: string;
-    const testFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/expression-test.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "expression-test.js"
     );
 
     beforeAll(async () => {
@@ -979,7 +1020,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
       sessionId = response.sessionId;
 
       // Continue to first debugger statement
@@ -999,7 +1040,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.variables).toBeDefined();
@@ -1022,7 +1063,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.variables).toBeDefined();
@@ -1058,7 +1099,7 @@ describe("MCP Debugger Server - E2E", () => {
       }
 
       try {
-        const response = JSON.parse(textContent.text);
+        const response = safeParseResponse(textContent.text);
 
         if (response.status === "success") {
           // Should have a value (the object)
@@ -1091,7 +1132,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const arrayResponse = JSON.parse(
+      const arrayResponse = safeParseResponse(
         arrayResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -1110,7 +1151,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const objResponse = JSON.parse(
+      const objResponse = safeParseResponse(
         objResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -1136,9 +1177,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Variable Watching - Requirements 3.5", () => {
     let sessionId: string;
-    const testFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/watch-test.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "watch-test.js"
     );
 
     beforeAll(async () => {
@@ -1156,7 +1195,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
       sessionId = response.sessionId;
 
       // Continue to first debugger statement
@@ -1179,7 +1218,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.watchId).toBeDefined();
@@ -1193,7 +1232,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("success");
       expect(response.watches).toBeDefined();
@@ -1216,7 +1255,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const response1 = JSON.parse(
+      const response1 = safeParseResponse(
         result1.content.find((c: any) => c.type === "text").text
       );
       const initialValue = response1.watches[0]?.value;
@@ -1235,7 +1274,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const response2 = JSON.parse(
+      const response2 = safeParseResponse(
         result2.content.find((c: any) => c.type === "text").text
       );
       const newValue = response2.watches[0]?.value;
@@ -1254,7 +1293,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const listResponse = JSON.parse(
+      const listResponse = safeParseResponse(
         listResult.content.find((c: any) => c.type === "text").text
       );
       const watchId = listResponse.watches[0]?.id;
@@ -1269,7 +1308,7 @@ describe("MCP Debugger Server - E2E", () => {
           },
         });
 
-        const removeResponse = JSON.parse(
+        const removeResponse = safeParseResponse(
           removeResult.content.find((c: any) => c.type === "text").text
         );
         expect(removeResponse.status).toBe("success");
@@ -1280,7 +1319,7 @@ describe("MCP Debugger Server - E2E", () => {
           arguments: { sessionId },
         });
 
-        const listResponse2 = JSON.parse(
+        const listResponse2 = safeParseResponse(
           listResult2.content.find((c: any) => c.type === "text").text
         );
         expect(
@@ -1305,9 +1344,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Stack Frame Navigation - Requirements 4.2, 4.3", () => {
     let sessionId: string;
-    const testFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/step-test.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js"
     );
 
     beforeAll(async () => {
@@ -1325,7 +1362,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
       sessionId = response.sessionId;
 
       // Continue to first debugger statement and step into innerFunction
@@ -1363,7 +1400,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const stackResponse = JSON.parse(
+      const stackResponse = safeParseResponse(
         stackResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -1377,7 +1414,7 @@ describe("MCP Debugger Server - E2E", () => {
           },
         });
 
-        const switchResponse = JSON.parse(
+        const switchResponse = safeParseResponse(
           switchResult.content.find((c: any) => c.type === "text").text
         );
 
@@ -1402,7 +1439,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const stackResponse = JSON.parse(
+      const stackResponse = safeParseResponse(
         stackResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -1422,7 +1459,7 @@ describe("MCP Debugger Server - E2E", () => {
           arguments: { sessionId },
         });
 
-        const vars0 = JSON.parse(
+        const vars0 = safeParseResponse(
           vars0Result.content.find((c: any) => c.type === "text").text
         );
 
@@ -1441,7 +1478,7 @@ describe("MCP Debugger Server - E2E", () => {
           arguments: { sessionId },
         });
 
-        const vars1 = JSON.parse(
+        const vars1 = safeParseResponse(
           vars1Result.content.find((c: any) => c.type === "text").text
         );
 
@@ -1476,7 +1513,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const response0 = JSON.parse(
+      const response0 = safeParseResponse(
         inspect0.content.find((c: any) => c.type === "text").text
       );
 
@@ -1498,7 +1535,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const response1 = JSON.parse(
+      const response1 = safeParseResponse(
         inspect1.content.find((c: any) => c.type === "text").text
       );
 
@@ -1526,9 +1563,7 @@ describe("MCP Debugger Server - E2E", () => {
   });
 
   describe("Session Management - Requirements 8.2, 8.5", () => {
-    const testFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/simple-script.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js"
     );
 
     it("should stop a debug session", async () => {
@@ -1542,7 +1577,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const startResponse = JSON.parse(
+      const startResponse = safeParseResponse(
         startResult.content.find((c: any) => c.type === "text").text
       );
       const sessionId = startResponse.sessionId;
@@ -1553,7 +1588,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const stopResponse = JSON.parse(
+      const stopResponse = safeParseResponse(
         stopResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -1588,10 +1623,10 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const response1 = JSON.parse(
+      const response1 = safeParseResponse(
         result1.content.find((c: any) => c.type === "text").text
       );
-      const response2 = JSON.parse(
+      const response2 = safeParseResponse(
         result2.content.find((c: any) => c.type === "text").text
       );
 
@@ -1630,10 +1665,10 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const response1 = JSON.parse(
+      const response1 = safeParseResponse(
         result1.content.find((c: any) => c.type === "text").text
       );
-      const response2 = JSON.parse(
+      const response2 = safeParseResponse(
         result2.content.find((c: any) => c.type === "text").text
       );
 
@@ -1653,7 +1688,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId: response2.sessionId },
       });
 
-      const bpResponse = JSON.parse(
+      const bpResponse = safeParseResponse(
         bpResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -1683,7 +1718,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const startResponse = JSON.parse(
+      const startResponse = safeParseResponse(
         startResult.content.find((c: any) => c.type === "text").text
       );
       const sessionId = startResponse.sessionId;
@@ -1711,9 +1746,7 @@ describe("MCP Debugger Server - E2E", () => {
   });
 
   describe("Crash Detection - Requirements 8.1", () => {
-    const testFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/crash-test-simple.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "crash-test-simple.js"
     );
 
     it("should detect process crash", async () => {
@@ -1727,7 +1760,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const startResponse = JSON.parse(
+      const startResponse = safeParseResponse(
         startResult.content.find((c: any) => c.type === "text").text
       );
       const sessionId = startResponse.sessionId;
@@ -1764,7 +1797,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const startResponse = JSON.parse(
+      const startResponse = safeParseResponse(
         startResult.content.find((c: any) => c.type === "text").text
       );
       const sessionId = startResponse.sessionId;
@@ -1788,7 +1821,7 @@ describe("MCP Debugger Server - E2E", () => {
       const textContent = stackResult.content.find(
         (c: any) => c.type === "text"
       );
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
       expect(response.status).toBe("error");
     }, 60000);
 
@@ -1803,7 +1836,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const startResponse = JSON.parse(
+      const startResponse = safeParseResponse(
         startResult.content.find((c: any) => c.type === "text").text
       );
       const sessionId = startResponse.sessionId;
@@ -1825,7 +1858,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result.isError).toBe(true);
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("error");
       expect(response.code).toBeDefined();
@@ -1835,9 +1868,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Test Framework Integration - Requirements 6.1, 6.2, 6.3, 6.4, 6.5", () => {
     it("should run Jest tests with debugger attached", async () => {
-      const testFile = path.join(
-        __dirname,
-        "../../../mcp-debugger-core/test-fixtures/jest-sample.test.js"
+      const testFile = path.join(TEST_FIXTURES_DIR, "jest-sample.test.js"
       );
 
       // Note: This would require a debugger_run_tests tool or similar
@@ -1853,7 +1884,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "success") {
         expect(response.sessionId).toBeDefined();
@@ -1871,9 +1902,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should run Mocha tests with debugger attached", async () => {
-      const testFile = path.join(
-        __dirname,
-        "../../../mcp-debugger-core/test-fixtures/mocha-sample.test.js"
+      const testFile = path.join(TEST_FIXTURES_DIR, "mocha-sample.test.js"
       );
 
       const result = await sendRequest("tools/call", {
@@ -1887,7 +1916,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "success") {
         expect(response.sessionId).toBeDefined();
@@ -1904,9 +1933,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should run Vitest tests with debugger attached", async () => {
-      const testFile = path.join(
-        __dirname,
-        "../../../mcp-debugger-core/test-fixtures/vitest-sample.test.js"
+      const testFile = path.join(TEST_FIXTURES_DIR, "vitest-sample.test.js"
       );
 
       const result = await sendRequest("tools/call", {
@@ -1920,7 +1947,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result).toBeDefined();
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "success") {
         expect(response.sessionId).toBeDefined();
@@ -1937,9 +1964,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should capture test output from stdout and stderr", async () => {
-      const testFile = path.join(
-        __dirname,
-        "../../../mcp-debugger-core/test-fixtures/simple-script.js"
+      const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js"
       );
 
       // Start a session that will produce output
@@ -1952,7 +1977,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const startResponse = JSON.parse(
+      const startResponse = safeParseResponse(
         startResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -1981,9 +2006,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should provide test failure information", async () => {
-      const testFile = path.join(
-        __dirname,
-        "../../../mcp-debugger-core/test-fixtures/crash-test-simple.js"
+      const testFile = path.join(TEST_FIXTURES_DIR, "crash-test-simple.js"
       );
 
       // Start a session with a script that will fail
@@ -1996,7 +2019,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      const startResponse = JSON.parse(
+      const startResponse = safeParseResponse(
         startResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -2022,7 +2045,7 @@ describe("MCP Debugger Server - E2E", () => {
         const textContent = stackResult.content.find(
           (c: any) => c.type === "text"
         );
-        const response = JSON.parse(textContent.text);
+        const response = safeParseResponse(textContent.text);
 
         // Should have error information (Requirement 6.5)
         expect(response.status).toBe("error");
@@ -2034,13 +2057,9 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Source Map Support - Requirements 7.1, 7.2, 7.3, 7.4", () => {
     let sessionId: string;
-    const tsFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/typescript-sample.ts"
+    const tsFile = path.join(TEST_FIXTURES_DIR, "typescript-sample.ts"
     );
-    const jsFile = path.join(
-      __dirname,
-      "../../../mcp-debugger-core/test-fixtures/typescript-sample.js"
+    const jsFile = path.join(TEST_FIXTURES_DIR, "typescript-sample.js"
     );
 
     beforeAll(async () => {
@@ -2064,7 +2083,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "success") {
         sessionId = response.sessionId;
@@ -2104,7 +2123,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const stackResponse = JSON.parse(
+      const stackResponse = safeParseResponse(
         stackResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -2138,7 +2157,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       // May succeed or fail depending on source map implementation
       // Just verify we get a proper response
@@ -2178,7 +2197,7 @@ describe("MCP Debugger Server - E2E", () => {
         arguments: { sessionId },
       });
 
-      const stackResponse = JSON.parse(
+      const stackResponse = safeParseResponse(
         stackResult.content.find((c: any) => c.type === "text").text
       );
 
@@ -2208,7 +2227,7 @@ describe("MCP Debugger Server - E2E", () => {
       });
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       if (response.status === "success") {
         expect(response.variables).toBeDefined();
@@ -2239,7 +2258,7 @@ describe("MCP Debugger Server - E2E", () => {
       expect(result.isError).toBe(true);
 
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       expect(response.status).toBe("error");
       expect(response.code).toBe("SESSION_NOT_FOUND");
@@ -2285,7 +2304,7 @@ describe("MCP Debugger Server - E2E", () => {
 
       expect(result.isError).toBe(true);
       const textContent = result.content.find((c: any) => c.type === "text");
-      const response = JSON.parse(textContent.text);
+      const response = safeParseResponse(textContent.text);
 
       // Verify error structure per Requirement 9.2
       expect(response.status).toBe("error");

@@ -1,0 +1,1 @@
+exports.Component = () => React.createElement("div");
