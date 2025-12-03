@@ -9,7 +9,7 @@
 
 This package is now maintained in its own repository: **[https://github.com/Digital-Defiance/mcp-debugger-server](https://github.com/Digital-Defiance/mcp-debugger-server)**
 
-This repository is part of the [https://github.com/Digital-Defiance/ai-capabilitites-suite](AI Capabilitites Suite) on GitHub.
+This repository is part of the [AI Capabilitites Suite](https://github.com/Digital-Defiance/ai-capabilitites-suite) on GitHub.
 
 An enterprise-grade Model Context Protocol (MCP) server that provides comprehensive debugging capabilities for Node.js and TypeScript applications. This server enables AI agents (Kiro, Amazon Q, GitHub Copilot) to interactively debug code with 25+ specialized tools, offering everything from basic breakpoint management to advanced CPU/memory profiling and hang detection.
 
