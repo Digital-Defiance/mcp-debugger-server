@@ -1,0 +1,129 @@
+version: "3.8"
+
+services:
+  mcp-debugger:
+    build:
+      context: ../..
+      dockerfile: packages/mcp-debugger-server/Dockerfile
+    image: digidefiance/mcp-debugger-server:latest
+    container_name: mcp-debugger-server
+    restart: unless-stopped
+
+    # Environment variables
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      # Authentication (optional)
+      # - MCP_AUTH_ENABLED=true
+      # - MCP_AUTH_TOKEN=your-secret-token
+      # Rate limiting (optional)
+      # - MCP_RATE_LIMIT_ENABLED=true
+      # - MCP_RATE_LIMIT_MAX_REQUESTS=100
+      # - MCP_RATE_LIMIT_WINDOW_MS=60000
+      # Session timeout (optional)
+      # - MCP_SESSION_TIMEOUT_MS=3600000
+      # Metrics (optional)
+      # - MCP_METRICS_ENABLED=true
+      # - MCP_METRICS_PORT=9090
+
+    # Ports (if exposing metrics or health endpoints)
+    ports:
+      - "3000:3000" # Main service port
+      # - "9090:9090"  # Metrics port (if enabled)
+
+    # Volumes for persistent data (optional)
+    volumes:
+      # Mount workspace for debugging
+      - ./workspace:/workspace:ro
+      # Mount logs directory
+      - ./logs:/app/logs
+      # Mount config directory
+      - ./config:/app/config:ro
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "node", "-e", "process.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+
+    # Read-only root filesystem (except for writable volumes)
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /app/logs
+
+    # Network configuration
+    networks:
+      - mcp-network
+
+  # Optional: Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: mcp-prometheus
+    restart: unless-stopped
+    profiles:
+      - monitoring
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+    networks:
+      - mcp-network
+
+  # Optional: Grafana for metrics visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: mcp-grafana
+    restart: unless-stopped
+    profiles:
+      - monitoring
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - mcp-network
+    depends_on:
+      - prometheus
+
+networks:
+  mcp-network:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:

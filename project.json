@@ -1,0 +1,19 @@
+{
+  "name": "@ai-capabilities-suite/mcp-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/mcp-debugger-server/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/mcp-debugger-server/dist",
+        "main": "packages/mcp-debugger-server/src/index.ts",
+        "tsConfig": "packages/mcp-debugger-server/tsconfig.lib.json",
+        "assets": []
+      },
+      "dependsOn": ["^build"]
+    }
+  }
+}

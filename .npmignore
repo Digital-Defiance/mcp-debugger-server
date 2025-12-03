@@ -1,0 +1,122 @@
+# Source files (only ship compiled dist/)
+src/
+*.ts
+!*.d.ts
+
+# Test files
+**/*.spec.ts
+**/*.spec.js
+**/*.test.ts
+**/*.test.js
+**/__tests__/
+**/__mocks__/
+test/
+tests/
+coverage/
+.nyc_output/
+
+# Build artifacts
+*.tsbuildinfo
+tsconfig.json
+tsconfig.*.json
+.swc/
+.swcrc
+*.swcrc
+
+# Development files
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Documentation (keep README, LICENSE, API docs)
+*.md
+!README.md
+!LICENSE
+!API.md
+!TOOL-REFERENCE.md
+!AI-AGENT-INTEGRATION.md
+!VSCODE-INTEGRATION.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+azure-pipelines.yml
+.jenkins/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Package managers
+node_modules/
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+.yarn/
+.pnpm/
+
+# Nx
+.nx/
+nx.json
+project.json
+
+# Linting and formatting
+.eslintrc*
+.eslintignore
+.prettierrc*
+.prettierignore
+.editorconfig
+eslint.config.*
+
+# Jest
+jest.config.*
+.spec.swcrc
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+tmp/
+temp/
+
+# Editor backup files
+*~
+*.swp
+*.swo
+*.bak
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build scripts
+scripts/
+*.sh
+!*.js
+
+# Misc
+.npmrc
+.yarnrc
+.yarnrc.yml

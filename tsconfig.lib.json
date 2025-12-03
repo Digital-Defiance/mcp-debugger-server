@@ -1,0 +1,32 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "dist",
+    "composite": true,
+    "declaration": true,
+    "module": "CommonJS",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "@ai-capabilities-suite/mcp-core": [
+        "../debugger-core/dist/index.d.ts"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "references": [],
+  "exclude": [
+    "jest.config.ts",
+    "jest.config.js",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts"
+  ]
+}

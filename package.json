@@ -1,0 +1,192 @@
+{
+  "name": "@ai-capabilities-suite/mcp-debugger-server",
+  "version": "1.1.5",
+  "mcpName": "io.github.DigitalDefiance/ts-mcp-debugger",
+  "description": "Enterprise-grade MCP server providing advanced debugging capabilities for Node.js and TypeScript applications. Features 25+ debugging tools including breakpoints, variable inspection, execution control, CPU/memory profiling, hang detection, source map support, and comprehensive observability.",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "bin": {
+    "mcp-debugger": "./dist/src/cli.js",
+    "ts-mcp-server": "./dist/src/cli.js"
+  },
+  "pkg": {
+    "scripts": [
+      "dist/src/**/*.js",
+      "../mcp-debugger-core/dist/**/*.js"
+    ],
+    "assets": [
+      "dist/**/*",
+      "../mcp-debugger-core/dist/**/*",
+      "node_modules/@modelcontextprotocol/sdk/**/*"
+    ],
+    "targets": [
+      "node18-linux-x64",
+      "node18-macos-x64",
+      "node18-win-x64"
+    ],
+    "outputPath": "../../binaries"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "@ts-mcp/source": "./src/index.ts",
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "API.md",
+    "TOOL-REFERENCE.md",
+    "AI-AGENT-INTEGRATION.md",
+    "VSCODE-INTEGRATION.md",
+    "TESTING.md",
+    "PUBLISHING.md",
+    "NPM-SETUP-GUIDE.md",
+    "NPM-TROUBLESHOOTING.md",
+    "!**/*.tsbuildinfo",
+    "!**/*.spec.js",
+    "!**/*.test.js"
+  ],
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "debugging",
+    "debugger",
+    "typescript",
+    "typescript-debugging",
+    "nodejs",
+    "node-debugger",
+    "breakpoints",
+    "conditional-breakpoints",
+    "logpoints",
+    "profiling",
+    "cpu-profiling",
+    "memory-profiling",
+    "performance",
+    "inspector-protocol",
+    "chrome-devtools-protocol",
+    "cdp",
+    "development-tools",
+    "developer-tools",
+    "devtools",
+    "ai-agent",
+    "ai-debugging",
+    "kiro",
+    "amazon-q",
+    "github-copilot",
+    "vscode",
+    "vscode-extension",
+    "hang-detection",
+    "infinite-loop-detection",
+    "source-maps",
+    "sourcemap",
+    "variable-inspection",
+    "execution-control",
+    "call-stack",
+    "stack-trace",
+    "test-debugging",
+    "jest",
+    "mocha",
+    "vitest",
+    "test-runner",
+    "enterprise",
+    "observability",
+    "monitoring",
+    "metrics",
+    "prometheus",
+    "audit-logging",
+    "security",
+    "authentication",
+    "rate-limiting",
+    "circuit-breaker",
+    "production-ready"
+  ],
+  "author": {
+    "name": "Digital Defiance",
+    "email": "info@digitaldefiance.org",
+    "url": "https://digitaldefiance.org"
+  },
+  "contributors": [
+    {
+      "name": "Jessica Mulein",
+      "email": "jessica@digitaldefiance.org",
+      "url": "https://github.com/JessicaMulein"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digital-defiance/ai-capabilities-suite.git",
+    "directory": "packages/mcp-debugger-server"
+  },
+  "bugs": {
+    "url": "https://github.com/digital-defiance/ai-capabilities-suite/issues",
+    "email": "info@digitaldefiance.org"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/digitaldefiance"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "mcp": {
+    "server": {
+      "name": "ts-mcp",
+      "description": "Advanced debugging capabilities for Node.js and TypeScript applications",
+      "version": "1.0.0",
+      "command": "ts-mcp-server",
+      "args": [],
+      "capabilities": [
+        "debugging",
+        "breakpoints",
+        "variable-inspection",
+        "execution-control",
+        "performance-profiling",
+        "hang-detection",
+        "source-maps",
+        "test-debugging",
+        "enterprise-features"
+      ],
+      "tools": 25,
+      "categories": [
+        "debugging",
+        "development-tools",
+        "testing",
+        "performance",
+        "observability"
+      ]
+    }
+  },
+  "dependencies": {
+    "@ai-capabilities-suite/mcp-debugger-core": "^1.0.4",
+    "@modelcontextprotocol/sdk": "^1.23.0",
+    "tslib": "^2.3.0",
+    "zod": "^4.1.13"
+  },
+  "peerDependencies": {
+    "node": ">=18.0.0"
+  },
+  "type": "commonjs"
+}
