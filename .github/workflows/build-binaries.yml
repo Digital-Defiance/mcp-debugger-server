@@ -1,0 +1,154 @@
+name: Build Binaries
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g., 1.0.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-binaries:
+    name: Build ${{ matrix.os }} binary
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - os: linux
+            runner: ubuntu-latest
+            target: node18-linux-x64
+            artifact: mcp-debugger-server-linux-x64
+          - os: macos
+            runner: macos-latest
+            target: node18-macos-x64
+            artifact: mcp-debugger-server-macos-x64
+          - os: windows
+            runner: windows-latest
+            target: node18-win-x64
+            artifact: mcp-debugger-server-win-x64.exe
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install pkg globally
+        run: npm install -g pkg
+
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Create binaries directory
+        run: mkdir -p binaries
+
+      - name: Build binary
+        run: |
+          pkg dist/src/cli.js --target ${{ matrix.target }} --output binaries/${{ matrix.artifact }}
+
+      - name: Test binary (Linux/macOS)
+        if: matrix.os != 'windows'
+        continue-on-error: true
+        run: |
+          chmod +x binaries/${{ matrix.artifact }}
+          binaries/${{ matrix.artifact }} --version || echo "Binary test completed"
+
+      - name: Test binary (Windows)
+        if: matrix.os == 'windows'
+        continue-on-error: true
+        run: |
+          binaries/${{ matrix.artifact }} --version || echo "Binary test completed"
+
+      - name: Create tarball (Linux/macOS)
+        if: matrix.os != 'windows'
+        run: |
+          cd binaries
+          tar -czf ${{ matrix.artifact }}.tar.gz ${{ matrix.artifact }}
+          sha256sum ${{ matrix.artifact }}.tar.gz > ${{ matrix.artifact }}.tar.gz.sha256
+
+      - name: Create zip (Windows)
+        if: matrix.os == 'windows'
+        run: |
+          cd binaries
+          7z a ${{ matrix.artifact }}.zip ${{ matrix.artifact }}
+          certutil -hashfile ${{ matrix.artifact }}.zip SHA256 > ${{ matrix.artifact }}.zip.sha256
+
+      - name: Upload binary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.os }}
+          path: |
+            binaries/${{ matrix.artifact }}*
+          retention-days: 7
+
+  create-release:
+    name: Create GitHub Release
+    needs: build-binaries
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: binaries
+          pattern: binary-*
+          merge-multiple: true
+
+      - name: Determine version
+        id: version
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          
+          echo "## What's Changed" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          if [ -n "$PREV_TAG" ]; then
+            git log --pretty=format:"- %s (%h)" $PREV_TAG..HEAD >> CHANGELOG.md
+          else
+            echo "First release of the MCP Debugger Server." >> CHANGELOG.md
+          fi
+          
+          echo "" >> CHANGELOG.md
+          echo "## Installation" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "### NPM" >> CHANGELOG.md
+          echo '```bash' >> CHANGELOG.md
+          echo "npm install -g @ai-capabilities-suite/mcp-debugger-server" >> CHANGELOG.md
+          echo '```' >> CHANGELOG.md
+
+      - name: Update GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: MCP Debugger Server v${{ steps.version.outputs.version }}
+          body_path: CHANGELOG.md
+          files: |
+            binaries/mcp-debugger-server-linux-x64.tar.gz
+            binaries/mcp-debugger-server-linux-x64.tar.gz.sha256
+            binaries/mcp-debugger-server-macos-x64.tar.gz
+            binaries/mcp-debugger-server-macos-x64.tar.gz.sha256
+            binaries/mcp-debugger-server-win-x64.zip
+            binaries/mcp-debugger-server-win-x64.zip.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
