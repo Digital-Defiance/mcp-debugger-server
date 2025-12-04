@@ -391,6 +391,23 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
   });
 
+  // Helper function to wait for process to be paused
+  async function waitForPausedState(sessionId: string, maxAttempts = 10): Promise<boolean> {
+    for (let i = 0; i < maxAttempts; i++) {
+      const result = await sendRequest("tools/call", {
+        name: "debugger_get_stack",
+        arguments: { sessionId },
+      });
+      const textContent = result.content.find((c: any) => c.type === "text");
+      const response = safeParseResponse(textContent.text);
+      if (response.status === "success") {
+        return true;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+    return false;
+  }
+
   describe("Tool Execution - Session Operations", () => {
     let sessionId: string;
     const testFile = path.join(TEST_FIXTURES_DIR, "step-test-simple.js"
@@ -432,7 +449,7 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      // Wait for breakpoint to be hit (longer on Windows)
+      // Wait for breakpoint to be hit (Windows needs more time)
       const waitTime = process.platform === 'win32' ? 2000 : 500;
       await new Promise((resolve) => setTimeout(resolve, waitTime));
     }, 60000);
@@ -472,9 +489,8 @@ describe("MCP Debugger Server - E2E", () => {
       expect(response.status).toBe("success");
       expect(response.state).toBeDefined();
 
-      // Wait for the process to hit the next breakpoint (longer on Windows)
-      const breakpointWait = process.platform === 'win32' ? 1500 : 500;
-      await new Promise((resolve) => setTimeout(resolve, breakpointWait));
+      // Wait for the process to hit the next breakpoint
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }, 60000);
 
     it("should step over", async () => {
@@ -594,9 +610,8 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      // Wait for debugger statement to be hit (longer on Windows)
-      const debuggerWait = process.platform === 'win32' ? 1500 : 500;
-      await new Promise((resolve) => setTimeout(resolve, debuggerWait));
+      // Wait for debugger statement to be hit
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }, 60000);
 
     it("should step into a function call", async () => {
