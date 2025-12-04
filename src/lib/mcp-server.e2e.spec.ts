@@ -449,8 +449,9 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      // Wait for breakpoint to be hit
-      const paused = await waitForPausedState(sessionId, 15);
+      // Wait for breakpoint to be hit (Windows needs more attempts)
+      const maxAttempts = process.platform === 'win32' ? 30 : 15;
+      const paused = await waitForPausedState(sessionId, maxAttempts);
       if (!paused) {
         throw new Error('Process did not pause at breakpoint within timeout');
       }
