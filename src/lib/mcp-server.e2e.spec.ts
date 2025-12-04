@@ -394,23 +394,30 @@ describe("MCP Debugger Server - E2E", () => {
   // Helper function to wait for process to be paused
   async function waitForPausedState(sessionId: string, maxAttempts = 10): Promise<boolean> {
     for (let i = 0; i < maxAttempts; i++) {
-      const result = await sendRequest("tools/call", {
-        name: "debugger_get_stack",
-        arguments: { sessionId },
-      });
-      const textContent = result.content.find((c: any) => c.type === "text");
-      const response = safeParseResponse(textContent.text);
-      if (response.status === "success") {
-        return true;
+      try {
+        const result = await sendRequest("tools/call", {
+          name: "debugger_get_stack",
+          arguments: { sessionId },
+        });
+        const textContent = result.content.find((c: any) => c.type === "text");
+        const response = safeParseResponse(textContent.text);
+        if (response.status === "success") {
+          console.log(`[Test] Process paused after ${i + 1} attempts`);
+          return true;
+        }
+        console.log(`[Test] Attempt ${i + 1}/${maxAttempts}: Not paused yet (${response.code || response.message})`);
+      } catch (e) {
+        console.log(`[Test] Attempt ${i + 1}/${maxAttempts}: Error - ${e.message}`);
       }
       await new Promise((resolve) => setTimeout(resolve, 200));
     }
+    console.log(`[Test] Failed to detect paused state after ${maxAttempts} attempts`);
     return false;
   }
 
   describe("Tool Execution - Session Operations", () => {
     let sessionId: string;
-    const testFile = path.join(TEST_FIXTURES_DIR, "step-test-simple.js"
+    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js"
     );
 
     beforeAll(async () => {
@@ -431,17 +438,7 @@ describe("MCP Debugger Server - E2E", () => {
       const response = safeParseResponse(textContent.text);
       sessionId = response.sessionId;
 
-      // Set a breakpoint at line 3
-      await sendRequest("tools/call", {
-        name: "debugger_set_breakpoint",
-        arguments: {
-          sessionId,
-          file: testFile,
-          line: 3,
-        },
-      });
-
-      // Continue to hit the breakpoint
+      // Continue to first debugger statement
       await sendRequest("tools/call", {
         name: "debugger_continue",
         arguments: {
@@ -449,13 +446,11 @@ describe("MCP Debugger Server - E2E", () => {
         },
       });
 
-      // Wait for breakpoint to be hit (Windows needs more time)
-      const initialWait = process.platform === 'win32' ? 2000 : 500;
-      await new Promise((resolve) => setTimeout(resolve, initialWait));
-      const maxAttempts = process.platform === 'win32' ? 50 : 15;
-      const paused = await waitForPausedState(sessionId, maxAttempts);
+      // Wait for debugger statement to be hit
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const paused = await waitForPausedState(sessionId, 15);
       if (!paused) {
-        throw new Error('Process did not pause at breakpoint within timeout');
+        throw new Error('Process did not pause at debugger statement within timeout');
       }
     }, 60000);
 
