@@ -14,7 +14,7 @@ COPY package.json yarn.lock* ./
 COPY tsconfig*.json ./
 
 # Install dependencies
-RUN corepack enable && yarn install --frozen-lockfile
+RUN corepack enable && yarn install --immutable
 
 # Copy source code
 COPY src ./src
