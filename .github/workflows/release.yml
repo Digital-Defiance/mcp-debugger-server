@@ -1,6 +1,9 @@
 name: Release
 
 on:
+  push:
+    tags:
+      - "v*.*.*"
   workflow_dispatch:
     inputs:
       version:
@@ -46,11 +49,10 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
-      - name: Bump version
+      - name: Get version
         run: |
-          npm version ${{ github.event.inputs.version }} --no-git-tag-version
           echo "NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
       - name: Build
@@ -61,8 +63,12 @@ jobs:
         env:
           CI: true
 
+      - name: Create npm package
+        run: |
+          npm pack
+          echo "PACKAGE_FILE=$(ls *.tgz)" >> $GITHUB_ENV
+
       - name: Generate changelog
-        id: changelog
         run: |
           echo "CHANGELOG<<EOF" >> $GITHUB_ENV
           echo "## Changes" >> $GITHUB_ENV
@@ -70,22 +76,12 @@ jobs:
           echo "" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Commit version changes
-        run: |
-          git add package.json package-lock.json
-          git commit -m "chore: bump version to ${{ env.NEW_VERSION }}"
-
-      - name: Create tag
-        run: |
-          git tag -a "v${{ env.NEW_VERSION }}" -m "Release v${{ env.NEW_VERSION }}"
-
-      - name: Push changes
-        run: |
-          git push origin main
-          git push origin "v${{ env.NEW_VERSION }}"
+      - name: Check NPM token
+        id: npm_token
+        run: echo "has_token=${{ secrets.NPM_TOKEN != '' }}" >> $GITHUB_OUTPUT
 
       - name: Publish to NPM
-        if: github.event.inputs.dry_run != 'true'
+        if: github.event.inputs.dry_run != 'true' && steps.npm_token.outputs.has_token == 'true'
         run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -103,14 +99,9 @@ jobs:
             ## Installation
 
             ```bash
-            npm install -g @ai-capabilities-suite/mcp-debugger-server
+            npm install @ai-capabilities-suite/mcp-debugger-server
             ```
-
-            ## Docker
-
-            ```bash
-            docker pull digidefiance/mcp-debugger-server:${{ env.NEW_VERSION }}
-            ```
+          files: ${{ env.PACKAGE_FILE }}
           draft: false
           prerelease: false
         env:

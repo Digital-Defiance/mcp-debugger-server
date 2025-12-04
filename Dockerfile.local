@@ -1,5 +1,5 @@
-# Dockerfile for MCP Debugger Server - Local Build
-# Builds from source instead of NPM (for CI/testing)
+# Dockerfile for MCP Debugger Server - Local Build (Submodule)
+# Builds from source within the submodule context
 
 FROM node:18-alpine AS builder
 
@@ -9,31 +9,17 @@ RUN apk add --no-cache python3 make g++
 # Set working directory
 WORKDIR /build
 
-# Copy workspace configuration
-COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn ./.yarn
-COPY nx.json tsconfig.base.json ./
-
-# Copy all package.json files (needed for workspace resolution)
-COPY packages ./packages
-
-# Remove source files, keep only package.json and necessary configs
-RUN find packages -type f ! -name 'package.json' ! -name 'project.json' ! -name 'tsconfig*.json' -delete && \
-    # Remove vscode-mcp-debugger entirely (not needed for server build)
-    rm -rf packages/vscode-mcp-debugger
+# Copy package files
+COPY package.json yarn.lock* ./
+COPY tsconfig*.json ./
 
 # Install dependencies
-RUN corepack enable && yarn install
+RUN corepack enable && yarn install --frozen-lockfile
 
-# Now copy the actual source code (overwriting the package directories)
-COPY packages/mcp-debugger-core/src ./packages/mcp-debugger-core/src
-COPY packages/mcp-debugger-core/tsconfig*.json ./packages/mcp-debugger-core/
-COPY packages/mcp-debugger-core/project.json ./packages/mcp-debugger-core/
-COPY packages/mcp-debugger-server/src ./packages/mcp-debugger-server/src  
-COPY packages/mcp-debugger-server/tsconfig*.json ./packages/mcp-debugger-server/
-COPY packages/mcp-debugger-server/project.json ./packages/mcp-debugger-server/
+# Copy source code
+COPY src ./src
 
-# Build the packages
+# Build the project
 RUN yarn build
 
 # Production stage
@@ -49,14 +35,10 @@ RUN addgroup -g 1001 -S mcp && \
 # Set working directory
 WORKDIR /app
 
-# Copy built packages from builder
-COPY --from=builder /build/packages/mcp-debugger-core/dist ./node_modules/@ai-capabilities-suite/mcp-debugger-core/dist
-COPY --from=builder /build/packages/mcp-debugger-core/package.json ./node_modules/@ai-capabilities-suite/mcp-debugger-core/
-COPY --from=builder /build/packages/mcp-debugger-server/dist ./dist
-COPY --from=builder /build/packages/mcp-debugger-server/package.json ./
-
-# Install production dependencies only
-RUN npm install --production --no-package-lock
+# Copy built files and dependencies from builder
+COPY --from=builder /build/dist ./dist
+COPY --from=builder /build/package.json ./
+COPY --from=builder /build/node_modules ./node_modules
 
 # Set environment variables
 ENV NODE_ENV=production \
@@ -78,7 +60,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 # Labels for metadata
 LABEL org.opencontainers.image.title="MCP Debugger Server" \
       org.opencontainers.image.description="Enterprise-grade MCP server for Node.js and TypeScript debugging" \
-      org.opencontainers.image.version="1.1.6" \
+      org.opencontainers.image.version="1.1.7" \
       org.opencontainers.image.vendor="Digital Defiance" \
       org.opencontainers.image.authors="Jessica Mulein <jessica@digitaldefiance.org>" \
       org.opencontainers.image.url="https://github.com/digital-defiance/ai-capabilities-suite" \
