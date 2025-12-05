@@ -1,46 +1,13 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
-  "name": "io.github.DigitalDefiance/ts-mcp-debugger",
-  "description": "Enterprise debugging for Node.js/TypeScript with 25+ tools: breakpoints, profiling, hang detection",
+  "name": "io.github.Digital-Defiance/mcp-debugger",
+  "description": "Node.js and TypeScript debugging with 25+ tools for AI agents",
   "repository": {
-    "url": "https://github.com/digital-defiance/ai-capabilities-suite",
+    "url": "https://github.com/Digital-Defiance/mcp-debugger-server",
     "source": "github"
   },
   "version": "1.1.7",
-  "homepage": "https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server#readme",
-  "license": "MIT",
-  "author": {
-    "name": "Digital Defiance",
-    "email": "info@digitaldefiance.org",
-    "url": "https://digitaldefiance.org"
-  },
-  "categories": [
-    "debugging",
-    "development-tools",
-    "testing",
-    "performance",
-    "observability"
-  ],
-  "keywords": [
-    "mcp",
-    "mcp-server",
-    "debugging",
-    "debugger",
-    "typescript",
-    "nodejs",
-    "breakpoints",
-    "profiling",
-    "performance",
-    "inspector-protocol",
-    "chrome-devtools-protocol",
-    "hang-detection",
-    "source-maps",
-    "variable-inspection",
-    "execution-control",
-    "test-debugging",
-    "enterprise",
-    "observability"
-  ],
+  "websiteUrl": "https://github.com/Digital-Defiance/mcp-debugger-server",
   "packages": [
     {
       "registryType": "npm",
@@ -48,112 +15,7 @@
       "version": "1.1.7",
       "transport": {
         "type": "stdio"
-      },
-      "environmentVariables": []
-    }
-  ],
-  "capabilities": {
-    "tools": [
-      {
-        "name": "debugger_start",
-        "description": "Start a new debug session with a Node.js process"
-      },
-      {
-        "name": "debugger_stop_session",
-        "description": "Stop a debug session and cleanup all resources"
-      },
-      {
-        "name": "debugger_set_breakpoint",
-        "description": "Set a breakpoint at a specific file and line number with optional condition"
-      },
-      {
-        "name": "debugger_remove_breakpoint",
-        "description": "Remove a breakpoint from the session"
-      },
-      {
-        "name": "debugger_toggle_breakpoint",
-        "description": "Toggle a breakpoint between enabled and disabled states"
-      },
-      {
-        "name": "debugger_list_breakpoints",
-        "description": "Get all breakpoints for a debug session"
-      },
-      {
-        "name": "debugger_continue",
-        "description": "Resume execution until the next breakpoint or program termination"
-      },
-      {
-        "name": "debugger_step_over",
-        "description": "Execute the current line and pause at the next line in the same scope"
-      },
-      {
-        "name": "debugger_step_into",
-        "description": "Execute the current line and pause at the first line inside any called function"
-      },
-      {
-        "name": "debugger_step_out",
-        "description": "Execute until the current function returns and pause at the calling location"
-      },
-      {
-        "name": "debugger_pause",
-        "description": "Pause a running debug session"
-      },
-      {
-        "name": "debugger_inspect",
-        "description": "Evaluate a JavaScript expression in the current execution context"
-      },
-      {
-        "name": "debugger_get_local_variables",
-        "description": "Get all local variables in the current scope"
-      },
-      {
-        "name": "debugger_get_global_variables",
-        "description": "Get global variables accessible from the current scope"
-      },
-      {
-        "name": "debugger_inspect_object",
-        "description": "Inspect an object's properties with nested resolution"
-      },
-      {
-        "name": "debugger_add_watch",
-        "description": "Add an expression to the watch list"
-      },
-      {
-        "name": "debugger_remove_watch",
-        "description": "Remove an expression from the watch list"
-      },
-      {
-        "name": "debugger_get_watches",
-        "description": "Get all watched expressions with their current values"
-      },
-      {
-        "name": "debugger_get_stack",
-        "description": "Get the current call stack with function names and file locations"
-      },
-      {
-        "name": "debugger_switch_stack_frame",
-        "description": "Switch the execution context to a specific stack frame"
-      },
-      {
-        "name": "debugger_detect_hang",
-        "description": "Detect if a process hangs or enters an infinite loop"
-      },
-      {
-        "name": "debugger_start_cpu_profile",
-        "description": "Start CPU profiling for performance analysis"
-      },
-      {
-        "name": "debugger_stop_cpu_profile",
-        "description": "Stop CPU profiling and get profile data"
-      },
-      {
-        "name": "debugger_take_heap_snapshot",
-        "description": "Take a heap snapshot for memory analysis"
-      },
-      {
-        "name": "debugger_get_performance_metrics",
-        "description": "Get performance metrics for the debug session"
       }
-    ]
-  }
+    }
+  ]
 }
