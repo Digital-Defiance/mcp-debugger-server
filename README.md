@@ -12,11 +12,13 @@ This package is now maintained in its own repository: **[https://github.com/Digi
 
 This repository is part of the [AI Capabilitites Suite](https://github.com/Digital-Defiance/ai-capabilitites-suite) on GitHub.
 
-An enterprise-grade Model Context Protocol (MCP) server that provides comprehensive debugging capabilities for Node.js and TypeScript applications. This server enables AI agents (Kiro, Amazon Q, GitHub Copilot) to interactively debug code with 25+ specialized tools, offering everything from basic breakpoint management to advanced CPU/memory profiling and hang detection.
+An enterprise-grade Model Context Protocol (MCP) server that provides comprehensive debugging capabilities for Node.js and JavaScript applications via Chrome DevTools Protocol. This server enables AI agents (Kiro, Amazon Q, GitHub Copilot) to interactively debug Node.js code with 25+ specialized tools, offering everything from basic breakpoint management to advanced CPU/memory profiling and hang detection. For multi-language debugging (Python, Java, Go, etc.), use the VS Code extension which leverages Debug Adapter Protocol.
 
 ## 🎯 Key Features
 
 ### Core Debugging Capabilities
+- **Node.js/JavaScript Support**: Debug Node.js applications and JavaScript code via Chrome DevTools Protocol
+- **TypeScript Support**: Full TypeScript debugging with source map resolution
 - **Breakpoint Management**: Set, remove, toggle, and list breakpoints with optional conditions, hit counts, and logpoints
 - **Execution Control**: Continue, step over, step into, step out, and pause execution with precise control
 - **Variable Inspection**: Inspect local and global variables, evaluate expressions, and watch variables with change detection
@@ -24,10 +26,11 @@ An enterprise-grade Model Context Protocol (MCP) server that provides comprehens
 
 ### Advanced Features
 - **Hang Detection**: Detect infinite loops and hanging processes with configurable timeouts and sampling intervals
-- **TypeScript Support**: Full source map support for debugging TypeScript code with original source locations and variable names
+- **Source Map Support**: Full source map support for debugging TypeScript and transpiled JavaScript with original source locations
 - **Performance Profiling**: CPU profiling, memory profiling, heap snapshots, and performance timeline tracking
-- **Test Framework Integration**: Debug Jest, Mocha, and Vitest tests with full debugging capabilities
+- **Test Framework Integration**: Debug Jest, Mocha, and Vitest tests
 - **Session Management**: Support for multiple concurrent debug sessions with complete isolation
+- **Chrome DevTools Protocol**: Direct integration with Node.js Inspector Protocol for low-level debugging
 
 ### Enterprise Features
 - **Observability**: Structured logging, metrics collection, health check endpoints, and Prometheus metrics export

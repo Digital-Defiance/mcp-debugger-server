@@ -1,9 +1,9 @@
 {
   "name": "@ai-capabilities-suite/mcp-debugger-server",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "packageManager": "yarn@4.12.0",
   "mcpName": "io.github.Digital-Defiance/mcp-debugger",
-  "description": "Enterprise-grade MCP server providing advanced debugging capabilities for Node.js and TypeScript applications. Features 25+ debugging tools including breakpoints, variable inspection, execution control, CPU/memory profiling, hang detection, source map support, and comprehensive observability.",
+  "description": "Enterprise-grade MCP server providing advanced debugging capabilities for Node.js and JavaScript applications via Chrome DevTools Protocol. Features 25+ debugging tools including breakpoints, variable inspection, execution control, CPU/memory profiling, hang detection, TypeScript source map support, and comprehensive observability. For multi-language debugging, use the VS Code extension.",
   "main": "./dist/src/index.js",
   "module": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -65,10 +65,11 @@
     "model-context-protocol",
     "debugging",
     "debugger",
-    "typescript",
-    "typescript-debugging",
     "nodejs",
     "node-debugger",
+    "javascript",
+    "typescript",
+    "typescript-debugging",
     "breakpoints",
     "conditional-breakpoints",
     "logpoints",
@@ -187,7 +188,7 @@
     }
   },
   "dependencies": {
-    "@ai-capabilities-suite/mcp-debugger-core": "^1.0.6",
+    "@ai-capabilities-suite/mcp-debugger-core": "^1.0.7",
     "@modelcontextprotocol/sdk": "^1.23.0",
     "tslib": "^2.3.0",
     "zod": "^4.1.13"
