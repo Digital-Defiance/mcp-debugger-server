@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
 
-# Docker Build and Push Script for DigiDefiance
+# Docker Build and Push Script for digitaldefiance
 # This script builds and pushes the MCP Debugger Server Docker image
 
 VERSION="1.1.7"
-IMAGE_NAME="digidefiance/mcp-debugger-server"
+IMAGE_NAME="digitaldefiance/mcp-debugger-server"
 
-echo "🐳 Building Docker image for DigiDefiance..."
+echo "🐳 Building Docker image for digitaldefiance..."
 echo "Version: $VERSION"
 echo "Image: $IMAGE_NAME"
 echo ""

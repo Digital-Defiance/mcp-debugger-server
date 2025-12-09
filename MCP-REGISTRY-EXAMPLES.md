@@ -63,14 +63,14 @@ Add to `.vscode/settings.json`:
 ### Docker Compose Configuration
 
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   mcp-debugger:
-    image: digidefiance/mcp-debugger-server:latest
+    image: digitaldefiance/mcp-debugger-server:latest
     container_name: mcp-debugger
     restart: unless-stopped
     ports:
-      - "9229:9229"  # Inspector port
+      - "9229:9229" # Inspector port
     environment:
       - NODE_ENV=production
     volumes:
@@ -595,7 +595,9 @@ services:
 ## Best Practices
 
 ### 1. Use Absolute Paths
+
 Always use absolute file paths for breakpoints to avoid ambiguity:
+
 ```javascript
 // Good
 "file": "/absolute/path/to/project/app.js"
@@ -605,7 +607,9 @@ Always use absolute file paths for breakpoints to avoid ambiguity:
 ```
 
 ### 2. Set Appropriate Timeouts
+
 Adjust timeouts based on expected execution time:
+
 ```javascript
 // Short timeout for unit tests
 "timeout": 10000  // 10 seconds
@@ -615,13 +619,17 @@ Adjust timeouts based on expected execution time:
 ```
 
 ### 3. Use Conditional Breakpoints
+
 Reduce noise by using conditions:
+
 ```javascript
 "condition": "i > 1000"  // Only break after 1000 iterations
 ```
 
 ### 4. Clean Up Sessions
+
 Always stop sessions when done:
+
 ```javascript
 {
   "tool": "debugger_stop_session",
@@ -632,7 +640,9 @@ Always stop sessions when done:
 ```
 
 ### 5. Enable Source Maps for TypeScript
+
 Ensure source maps are enabled:
+
 ```bash
 node --enable-source-maps dist/app.js
 ```
@@ -640,15 +650,19 @@ node --enable-source-maps dist/app.js
 ## Troubleshooting
 
 ### Issue: Breakpoint Not Hitting
+
 **Solution**: Verify file path is absolute and line has executable code
 
 ### Issue: Session Timeout
+
 **Solution**: Increase timeout parameter or check for infinite loops
 
 ### Issue: TypeScript Breakpoints Not Working
+
 **Solution**: Ensure source maps are enabled and .map files exist
 
 ### Issue: Variables Not Visible
+
 **Solution**: Ensure session is paused before inspecting variables
 
 ## Additional Resources

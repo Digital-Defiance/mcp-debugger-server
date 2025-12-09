@@ -6,8 +6,8 @@ Quick commands and references for Docker deployment of MCP Debugger Server.
 
 ```bash
 # Pull and run
-docker pull digidefiance/mcp-debugger-server:latest
-docker run -d --name mcp-debugger digidefiance/mcp-debugger-server:latest
+docker pull digitaldefiance/mcp-debugger-server:latest
+docker run -d --name mcp-debugger digitaldefiance/mcp-debugger-server:latest
 
 # Using docker-compose
 docker-compose up -d
@@ -46,16 +46,16 @@ docker exec -it mcp-debugger sh
 
 ```bash
 # List images
-docker images digidefiance/mcp-debugger-server
+docker images digitaldefiance/mcp-debugger-server
 
 # Pull specific version
-docker pull digidefiance/mcp-debugger-server:v1.0.0
+docker pull digitaldefiance/mcp-debugger-server:v1.0.0
 
 # Remove image
-docker rmi digidefiance/mcp-debugger-server:latest
+docker rmi digitaldefiance/mcp-debugger-server:latest
 
 # Inspect image
-docker inspect digidefiance/mcp-debugger-server:latest
+docker inspect digitaldefiance/mcp-debugger-server:latest
 ```
 
 ### Health and Monitoring
@@ -80,7 +80,7 @@ docker run -d \
   -e LOG_LEVEL=debug \
   -e MCP_AUTH_ENABLED=true \
   -e MCP_AUTH_TOKEN=your-token \
-  digidefiance/mcp-debugger-server:latest
+  digitaldefiance/mcp-debugger-server:latest
 ```
 
 ## Volume Mounts
@@ -90,7 +90,7 @@ docker run -d \
 docker run -d \
   -v $(pwd)/workspace:/workspace:ro \
   -v $(pwd)/logs:/app/logs \
-  digidefiance/mcp-debugger-server:latest
+  digitaldefiance/mcp-debugger-server:latest
 ```
 
 ## Port Mapping
@@ -100,7 +100,7 @@ docker run -d \
 docker run -d \
   -p 3000:3000 \
   -p 9090:9090 \
-  digidefiance/mcp-debugger-server:latest
+  digitaldefiance/mcp-debugger-server:latest
 ```
 
 ## Docker Compose Profiles
@@ -157,7 +157,7 @@ docker buildx create --name multiarch --use
 # Build for multiple platforms
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  -t digidefiance/mcp-debugger-server:latest \
+  -t digitaldefiance/mcp-debugger-server:latest \
   --push \
   -f packages/mcp-debugger-server/Dockerfile \
   .
@@ -168,10 +168,10 @@ docker buildx build \
 ```bash
 # Scan with Trivy
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-  aquasec/trivy image digidefiance/mcp-debugger-server:latest
+  aquasec/trivy image digitaldefiance/mcp-debugger-server:latest
 
 # Scan with Snyk
-snyk container test digidefiance/mcp-debugger-server:latest
+snyk container test digitaldefiance/mcp-debugger-server:latest
 ```
 
 ## Files Created

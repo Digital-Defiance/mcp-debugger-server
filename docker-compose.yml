@@ -5,7 +5,7 @@ services:
     build:
       context: ../..
       dockerfile: packages/mcp-debugger-server/Dockerfile
-    image: digidefiance/mcp-debugger-server:latest
+    image: digitaldefiance/mcp-debugger-server:latest
     container_name: mcp-debugger-server
     restart: unless-stopped
 

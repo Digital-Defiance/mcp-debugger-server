@@ -5,6 +5,7 @@ Enterprise-grade debugging for Node.js and TypeScript applications with 25+ spec
 ## Documentation
 
 For complete documentation, visit:
+
 - **Main Documentation**: https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server#readme
 - **Tool Reference**: https://github.com/digital-defiance/ai-capabilities-suite/blob/main/packages/mcp-debugger-server/TOOL-REFERENCE.md
 - **AI Agent Integration**: https://github.com/digital-defiance/ai-capabilities-suite/blob/main/packages/mcp-debugger-server/AI-AGENT-INTEGRATION.md
@@ -13,18 +14,21 @@ For complete documentation, visit:
 ## Features
 
 ### Core Debugging
+
 - **Breakpoint Management**: Set, remove, toggle, and list breakpoints with conditions, hit counts, and logpoints
 - **Execution Control**: Continue, step over/into/out, and pause execution
 - **Variable Inspection**: Inspect local/global variables, evaluate expressions, watch variables
 - **Call Stack Navigation**: View and navigate stack frames with context switching
 
 ### Advanced Features
+
 - **Hang Detection**: Detect infinite loops and hanging processes
 - **TypeScript Support**: Full source map support for TypeScript debugging
 - **Performance Profiling**: CPU profiling, memory profiling, heap snapshots
 - **Test Framework Integration**: Debug Jest, Mocha, and Vitest tests
 
 ### Enterprise Features
+
 - **Observability**: Structured logging, metrics, health checks, Prometheus export
 - **Security**: Authentication, rate limiting, data masking, audit logging
 - **Production Ready**: Circuit breakers, retry logic, graceful shutdown, resource limits
@@ -46,16 +50,16 @@ docker run -d \
   --name mcp-debugger \
   -e NODE_ENV=production \
   -e LOG_LEVEL=info \
-  digidefiance/mcp-debugger-server:latest
+  digitaldefiance/mcp-debugger-server:latest
 ```
 
 ### Using Docker Compose
 
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   mcp-debugger:
-    image: digidefiance/mcp-debugger-server:latest
+    image: digitaldefiance/mcp-debugger-server:latest
     environment:
       - NODE_ENV=production
       - LOG_LEVEL=info
@@ -67,16 +71,19 @@ services:
 The server provides 25 debugging tools:
 
 ### Session Management
+
 - `debugger_start` - Start a new debug session
 - `debugger_stop_session` - Stop a debug session
 
 ### Breakpoints
+
 - `debugger_set_breakpoint` - Set a breakpoint with optional condition
 - `debugger_remove_breakpoint` - Remove a breakpoint
 - `debugger_toggle_breakpoint` - Toggle breakpoint enabled/disabled
 - `debugger_list_breakpoints` - List all breakpoints
 
 ### Execution Control
+
 - `debugger_continue` - Resume execution
 - `debugger_step_over` - Step over current line
 - `debugger_step_into` - Step into function call
@@ -84,6 +91,7 @@ The server provides 25 debugging tools:
 - `debugger_pause` - Pause execution
 
 ### Variable Inspection
+
 - `debugger_inspect` - Evaluate an expression
 - `debugger_get_local_variables` - Get local variables
 - `debugger_get_global_variables` - Get global variables
@@ -93,10 +101,12 @@ The server provides 25 debugging tools:
 - `debugger_get_watches` - Get all watched expressions
 
 ### Call Stack
+
 - `debugger_get_stack` - Get current call stack
 - `debugger_switch_stack_frame` - Switch to a different stack frame
 
 ### Advanced Features
+
 - `debugger_detect_hang` - Detect hanging processes and infinite loops
 - `debugger_start_cpu_profile` - Start CPU profiling
 - `debugger_stop_cpu_profile` - Stop CPU profiling and get results
@@ -106,6 +116,7 @@ The server provides 25 debugging tools:
 ## Use Cases
 
 ### Debugging Failing Tests
+
 ```
 1. Start debug session with test command
 2. Set breakpoints in test code
@@ -115,6 +126,7 @@ The server provides 25 debugging tools:
 ```
 
 ### Performance Analysis
+
 ```
 1. Start debug session with your application
 2. Start CPU profiling
@@ -124,6 +136,7 @@ The server provides 25 debugging tools:
 ```
 
 ### Detecting Infinite Loops
+
 ```
 1. Use debugger_detect_hang with your code
 2. Configure timeout and sample interval
@@ -132,6 +145,7 @@ The server provides 25 debugging tools:
 ```
 
 ### TypeScript Debugging
+
 ```
 1. Start debug session with TypeScript code
 2. Set breakpoints in .ts files (not .js)
@@ -160,6 +174,7 @@ MIT License - See [LICENSE](https://github.com/digital-defiance/ai-capabilities-
 ## Author
 
 **Digital Defiance**
+
 - Website: https://digitaldefiance.org
 - GitHub: https://github.com/digital-defiance
 - Email: info@digitaldefiance.org

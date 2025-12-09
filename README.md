@@ -4,7 +4,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/digital-defiance/mcp-debugger-server?label=Release&logo=github)](https://github.com/digital-defiance/mcp-debugger-server/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/digidefiance/mcp-debugger-server)](https://hub.docker.com/r/digidefiance/mcp-debugger-server)
+[![Docker Pulls](https://img.shields.io/docker/pulls/digitaldefiance/mcp-debugger-server)](https://hub.docker.com/r/digitaldefiance/mcp-debugger-server)
 
 ## 🔗 Repository
 
@@ -17,6 +17,7 @@ An enterprise-grade Model Context Protocol (MCP) server that provides comprehens
 ## 🎯 Key Features
 
 ### Core Debugging Capabilities
+
 - **Node.js/JavaScript Support**: Debug Node.js applications and JavaScript code via Chrome DevTools Protocol
 - **TypeScript Support**: Full TypeScript debugging with source map resolution
 - **Breakpoint Management**: Set, remove, toggle, and list breakpoints with optional conditions, hit counts, and logpoints
@@ -25,6 +26,7 @@ An enterprise-grade Model Context Protocol (MCP) server that provides comprehens
 - **Call Stack Navigation**: View and navigate through call stack frames with context switching
 
 ### Advanced Features
+
 - **Hang Detection**: Detect infinite loops and hanging processes with configurable timeouts and sampling intervals
 - **Source Map Support**: Full source map support for debugging TypeScript and transpiled JavaScript with original source locations
 - **Performance Profiling**: CPU profiling, memory profiling, heap snapshots, and performance timeline tracking
@@ -33,6 +35,7 @@ An enterprise-grade Model Context Protocol (MCP) server that provides comprehens
 - **Chrome DevTools Protocol**: Direct integration with Node.js Inspector Protocol for low-level debugging
 
 ### Enterprise Features
+
 - **Observability**: Structured logging, metrics collection, health check endpoints, and Prometheus metrics export
 - **Security**: Authentication, rate limiting, sensitive data masking, audit logging, and session timeout enforcement
 - **Production Ready**: Circuit breakers, retry logic with exponential backoff, graceful shutdown, and resource limits
@@ -60,22 +63,25 @@ ts-mcp-server --version
 ### Alternative Installation Methods
 
 #### Using NPX (No Installation Required)
+
 ```bash
 # Run directly without installing
 npx @ai-capabilities-suite/mcp-debugger-server
 ```
 
 #### Using Docker
+
 ```bash
 # Pull and run the Docker image
-docker pull digidefiance/mcp-debugger-server:latest
-docker run -d --name mcp-debugger digidefiance/mcp-debugger-server:latest
+docker pull digitaldefiance/mcp-debugger-server:latest
+docker run -d --name mcp-debugger digitaldefiance/mcp-debugger-server:latest
 
 # Or use docker-compose (see DOCKER-DEPLOYMENT.md)
 docker-compose up -d
 ```
 
 #### From Source
+
 ```bash
 # Clone the repository
 git clone https://github.com/digital-defiance/ai-capabilities-suite.git
@@ -180,15 +186,18 @@ The MCP Debugger Server provides **25 specialized tools** organized into 8 categ
 ### Session Management
 
 #### 1. `debugger_start`
+
 Start a new debug session with a Node.js process.
 
 **Parameters:**
+
 - `command` (string, required): The command to execute (e.g., "node", "npm")
 - `args` (string[], optional): Command arguments (e.g., ["test.js"])
 - `cwd` (string, optional): Working directory for the process
 - `timeout` (number, optional): Timeout in milliseconds (default: 30000)
 
 **Example:**
+
 ```json
 {
   "command": "node",
@@ -199,6 +208,7 @@ Start a new debug session with a Node.js process.
 ```
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -209,12 +219,15 @@ Start a new debug session with a Node.js process.
 ```
 
 #### 2. `debugger_stop_session`
+
 Stop a debug session and cleanup all resources.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 **Example:**
+
 ```json
 {
   "sessionId": "session-123"
@@ -224,15 +237,18 @@ Stop a debug session and cleanup all resources.
 ### Breakpoint Management
 
 #### 3. `debugger_set_breakpoint`
+
 Set a breakpoint at a specific file and line number.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 - `file` (string, required): The file path (absolute or relative)
 - `line` (number, required): The line number (1-indexed)
 - `condition` (string, optional): Optional condition expression (e.g., "x > 10")
 
 **Example:**
+
 ```json
 {
   "sessionId": "session-123",
@@ -243,26 +259,33 @@ Set a breakpoint at a specific file and line number.
 ```
 
 #### 4. `debugger_remove_breakpoint`
+
 Remove a breakpoint from the session.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 - `breakpointId` (string, required): The breakpoint ID to remove
 
 #### 5. `debugger_toggle_breakpoint`
+
 Toggle a breakpoint between enabled and disabled states.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 - `breakpointId` (string, required): The breakpoint ID to toggle
 
 #### 6. `debugger_list_breakpoints`
+
 Get all breakpoints for a debug session.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -282,45 +305,58 @@ Get all breakpoints for a debug session.
 ### Execution Control
 
 #### 7. `debugger_continue`
+
 Resume execution until the next breakpoint or program termination.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 #### 8. `debugger_step_over`
+
 Execute the current line and pause at the next line in the same scope.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 #### 9. `debugger_step_into`
+
 Execute the current line and pause at the first line inside any called function.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 #### 10. `debugger_step_out`
+
 Execute until the current function returns and pause at the calling location.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 #### 11. `debugger_pause`
+
 Pause a running debug session.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 ### Variable Inspection
 
 #### 12. `debugger_inspect`
+
 Evaluate a JavaScript expression in the current execution context.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 - `expression` (string, required): The JavaScript expression to evaluate
 
 **Example:**
+
 ```json
 {
   "sessionId": "session-123",
@@ -329,21 +365,27 @@ Evaluate a JavaScript expression in the current execution context.
 ```
 
 #### 13. `debugger_get_local_variables`
+
 Get all local variables in the current scope.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 #### 14. `debugger_get_global_variables`
+
 Get global variables accessible from the current scope.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 #### 15. `debugger_inspect_object`
+
 Inspect an object's properties with nested resolution.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 - `objectId` (string, required): The object ID from a previous inspection
 - `maxDepth` (number, optional): Maximum depth to traverse (default: 2)
@@ -351,34 +393,43 @@ Inspect an object's properties with nested resolution.
 ### Variable Watching
 
 #### 16. `debugger_add_watch`
+
 Add an expression to the watch list.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 - `expression` (string, required): The expression to watch
 
 #### 17. `debugger_remove_watch`
+
 Remove an expression from the watch list.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 - `watchId` (string, required): The watch ID (expression) to remove
 
 #### 18. `debugger_get_watches`
+
 Get all watched expressions with their current values.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 ### Call Stack
 
 #### 19. `debugger_get_stack`
+
 Get the current call stack with function names and file locations.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -394,18 +445,22 @@ Get the current call stack with function names and file locations.
 ```
 
 #### 20. `debugger_switch_stack_frame`
+
 Switch the execution context to a specific stack frame.
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 - `frameIndex` (number, required): The frame index (0 = top frame)
 
 ### Hang Detection
 
 #### 21. `debugger_detect_hang`
+
 Detect if a process hangs or enters an infinite loop.
 
 **Parameters:**
+
 - `command` (string, required): The command to execute
 - `args` (string[], optional): Command arguments
 - `cwd` (string, optional): Working directory
@@ -413,6 +468,7 @@ Detect if a process hangs or enters an infinite loop.
 - `sampleInterval` (number, optional): Sample interval for loop detection (default: 100ms)
 
 **Example:**
+
 ```json
 {
   "command": "node",
@@ -423,6 +479,7 @@ Detect if a process hangs or enters an infinite loop.
 ```
 
 **Response (hung):**
+
 ```json
 {
   "status": "success",
@@ -435,6 +492,7 @@ Detect if a process hangs or enters an infinite loop.
 ```
 
 **Response (completed):**
+
 ```json
 {
   "status": "success",
@@ -448,12 +506,15 @@ Detect if a process hangs or enters an infinite loop.
 ## 🚀 Quick Start Guide
 
 ### 1. Install the Server
+
 ```bash
 npm install -g @ai-capabilities-suite/mcp-debugger-server
 ```
 
 ### 2. Configure Your AI Agent
+
 Add to your MCP configuration file (e.g., `.kiro/settings/mcp.json`):
+
 ```json
 {
   "mcpServers": {
@@ -466,12 +527,15 @@ Add to your MCP configuration file (e.g., `.kiro/settings/mcp.json`):
 ```
 
 ### 3. Start Debugging
+
 Ask your AI agent to debug your code:
+
 ```
 "Debug my Node.js script app.js and set a breakpoint at line 42"
 ```
 
 The AI agent will use the MCP Debugger Server to:
+
 1. Start a debug session
 2. Set the breakpoint
 3. Run your code
@@ -658,13 +722,13 @@ The AI agent will use the MCP Debugger Server to:
 ### Debugging in Action
 
 ![Debugging Session](https://via.placeholder.com/800x400?text=Debugging+Session+Demo)
-*Setting breakpoints and inspecting variables in a Node.js application*
+_Setting breakpoints and inspecting variables in a Node.js application_
 
 ![Hang Detection](https://via.placeholder.com/800x400?text=Hang+Detection+Demo)
-*Detecting and diagnosing an infinite loop*
+_Detecting and diagnosing an infinite loop_
 
 ![TypeScript Debugging](https://via.placeholder.com/800x400?text=TypeScript+Debugging+Demo)
-*Debugging TypeScript code with source map support*
+_Debugging TypeScript code with source map support_
 
 > **Note**: Replace placeholder images with actual screenshots or animated GIFs demonstrating the debugger in action. See [images/README.md](./images/README.md) for guidelines.
 
@@ -673,9 +737,11 @@ The AI agent will use the MCP Debugger Server to:
 ### Common Issues and Solutions
 
 #### Issue: "Session not found"
+
 **Symptoms**: Error when trying to use a session ID
 **Cause**: The session ID is invalid or the session has been terminated
-**Solution**: 
+**Solution**:
+
 ```bash
 # Start a new debug session
 {
@@ -688,16 +754,20 @@ The AI agent will use the MCP Debugger Server to:
 ```
 
 #### Issue: "Process must be paused"
+
 **Symptoms**: Cannot inspect variables or evaluate expressions
 **Cause**: Trying to inspect variables when the process is running
-**Solution**: 
+**Solution**:
+
 - Set a breakpoint and continue to it, OR
 - Use `debugger_pause` to pause execution immediately
 
 #### Issue: Breakpoint not hitting
+
 **Symptoms**: Execution doesn't stop at the breakpoint
 **Cause**: Invalid breakpoint location or code path not executed
-**Solution**: 
+**Solution**:
+
 1. Verify the file path is correct (use absolute paths):
    ```javascript
    "file": "/absolute/path/to/your/file.js"  // ✅ Good
@@ -713,9 +783,11 @@ The AI agent will use the MCP Debugger Server to:
    ```
 
 #### Issue: Hang detection false positives
+
 **Symptoms**: Hang detection reports a hang when the script is running normally
 **Cause**: The timeout is too short for the script's normal execution time
-**Solution**: 
+**Solution**:
+
 ```javascript
 {
   "tool": "debugger_detect_hang",
@@ -729,9 +801,11 @@ The AI agent will use the MCP Debugger Server to:
 ```
 
 #### Issue: TypeScript breakpoints not working
+
 **Symptoms**: Breakpoints in .ts files don't pause execution
 **Cause**: Source maps are not enabled or not found
 **Solution**:
+
 1. Ensure `"sourceMap": true` in tsconfig.json:
    ```json
    {
@@ -750,9 +824,11 @@ The AI agent will use the MCP Debugger Server to:
    ```
 
 #### Issue: "Cannot find module" errors
+
 **Symptoms**: Module not found errors when starting the server
 **Cause**: The packages haven't been built or dependencies not installed
 **Solution**:
+
 ```bash
 # Install dependencies
 npm install
@@ -766,9 +842,11 @@ npm install -g @ai-capabilities-suite/mcp-debugger-server
 ```
 
 #### Issue: WebSocket connection errors
+
 **Symptoms**: "Failed to connect to inspector" or WebSocket errors
 **Cause**: The Inspector Protocol failed to start
 **Solution**:
+
 1. Ensure Node.js version is 18 or higher:
    ```bash
    node --version  # Should be >= 18.0.0
@@ -781,9 +859,11 @@ npm install -g @ai-capabilities-suite/mcp-debugger-server
    ```
 
 #### Issue: High memory usage
+
 **Symptoms**: Server consumes excessive memory
 **Cause**: Too many concurrent sessions or large heap snapshots
 **Solution**:
+
 1. Limit concurrent sessions
 2. Stop unused sessions:
    ```javascript
@@ -795,9 +875,11 @@ npm install -g @ai-capabilities-suite/mcp-debugger-server
 3. Configure resource limits (see Environment Variables section)
 
 #### Issue: Slow performance
+
 **Symptoms**: Debugging operations are slow
 **Cause**: Large objects, deep inspection, or many breakpoints
 **Solution**:
+
 1. Limit object inspection depth:
    ```javascript
    {
@@ -828,31 +910,41 @@ If you encounter issues not covered here:
 ## 💡 Use Cases
 
 ### 1. AI-Assisted Debugging
+
 Enable AI agents to autonomously debug your code:
+
 - **Kiro**: "Debug my failing test and tell me why it's failing"
 - **Amazon Q**: "Find the infinite loop in my script"
 - **GitHub Copilot**: "Set a breakpoint and inspect the user object"
 
 ### 2. Automated Testing & CI/CD
+
 Integrate debugging into your CI/CD pipeline:
+
 - Debug failing tests automatically
 - Detect performance regressions
 - Identify memory leaks before deployment
 
 ### 3. Production Issue Investigation
+
 Debug production-like environments safely:
+
 - Reproduce production issues locally
 - Inspect state without modifying code
 - Analyze performance bottlenecks
 
 ### 4. Learning & Education
+
 Help developers learn debugging techniques:
+
 - Step through code execution
 - Understand call stacks and scope
 - Visualize variable changes
 
 ### 5. Performance Optimization
+
 Identify and fix performance issues:
+
 - Profile CPU usage
 - Analyze memory allocation
 - Detect memory leaks
@@ -860,59 +952,62 @@ Identify and fix performance issues:
 
 ## 📊 Feature Comparison
 
-| Feature | MCP Debugger Server | VS Code Debugger | Chrome DevTools | Node Inspector |
-|---------|---------------------|------------------|-----------------|----------------|
-| AI Agent Integration | ✅ Full MCP Support | ❌ No | ❌ No | ❌ No |
-| Breakpoints | ✅ Advanced (conditional, hit count, logpoints) | ✅ Yes | ✅ Yes | ✅ Basic |
-| Variable Inspection | ✅ Deep inspection with type info | ✅ Yes | ✅ Yes | ✅ Basic |
-| TypeScript Support | ✅ Full source map support | ✅ Yes | ✅ Yes | ⚠️ Limited |
-| Hang Detection | ✅ Automated with sampling | ❌ No | ❌ No | ❌ No |
-| CPU Profiling | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No |
-| Memory Profiling | ✅ Yes with leak detection | ✅ Yes | ✅ Yes | ❌ No |
-| Multiple Sessions | ✅ Isolated concurrent sessions | ⚠️ Limited | ⚠️ Limited | ❌ No |
-| Test Framework Integration | ✅ Jest, Mocha, Vitest | ✅ Yes | ❌ No | ❌ No |
-| Remote Debugging | ✅ Via MCP protocol | ✅ Yes | ✅ Yes | ✅ Yes |
-| Audit Logging | ✅ Enterprise-grade | ❌ No | ❌ No | ❌ No |
-| Rate Limiting | ✅ Yes | ❌ No | ❌ No | ❌ No |
-| Metrics Export | ✅ Prometheus | ❌ No | ❌ No | ❌ No |
+| Feature                    | MCP Debugger Server                             | VS Code Debugger | Chrome DevTools | Node Inspector |
+| -------------------------- | ----------------------------------------------- | ---------------- | --------------- | -------------- |
+| AI Agent Integration       | ✅ Full MCP Support                             | ❌ No            | ❌ No           | ❌ No          |
+| Breakpoints                | ✅ Advanced (conditional, hit count, logpoints) | ✅ Yes           | ✅ Yes          | ✅ Basic       |
+| Variable Inspection        | ✅ Deep inspection with type info               | ✅ Yes           | ✅ Yes          | ✅ Basic       |
+| TypeScript Support         | ✅ Full source map support                      | ✅ Yes           | ✅ Yes          | ⚠️ Limited     |
+| Hang Detection             | ✅ Automated with sampling                      | ❌ No            | ❌ No           | ❌ No          |
+| CPU Profiling              | ✅ Yes                                          | ✅ Yes           | ✅ Yes          | ❌ No          |
+| Memory Profiling           | ✅ Yes with leak detection                      | ✅ Yes           | ✅ Yes          | ❌ No          |
+| Multiple Sessions          | ✅ Isolated concurrent sessions                 | ⚠️ Limited       | ⚠️ Limited      | ❌ No          |
+| Test Framework Integration | ✅ Jest, Mocha, Vitest                          | ✅ Yes           | ❌ No           | ❌ No          |
+| Remote Debugging           | ✅ Via MCP protocol                             | ✅ Yes           | ✅ Yes          | ✅ Yes         |
+| Audit Logging              | ✅ Enterprise-grade                             | ❌ No            | ❌ No           | ❌ No          |
+| Rate Limiting              | ✅ Yes                                          | ❌ No            | ❌ No           | ❌ No          |
+| Metrics Export             | ✅ Prometheus                                   | ❌ No            | ❌ No           | ❌ No          |
 
 ## 📋 Error Codes
 
 The server returns structured error responses with the following codes:
 
-| Error Code | Description | Common Causes | Solution |
-|------------|-------------|---------------|----------|
-| `SESSION_NOT_FOUND` | Session ID doesn't exist | Invalid ID or terminated session | Start a new session |
-| `SESSION_START_FAILED` | Failed to start debug session | Invalid command or permissions | Check command and file paths |
-| `BREAKPOINT_SET_FAILED` | Failed to set breakpoint | Invalid file path or line number | Use absolute paths and valid lines |
-| `BREAKPOINT_NOT_FOUND` | Breakpoint doesn't exist | Invalid breakpoint ID | List breakpoints to verify IDs |
-| `CONTINUE_FAILED` | Failed to resume execution | Process crashed or terminated | Check process status |
-| `STEP_OVER_FAILED` | Failed to step over | Not paused or invalid state | Ensure process is paused |
-| `STEP_INTO_FAILED` | Failed to step into | Not paused or no function call | Ensure at function call |
-| `STEP_OUT_FAILED` | Failed to step out | Not in a function | Check call stack |
-| `PAUSE_FAILED` | Failed to pause execution | Process not running | Ensure process is running |
-| `INSPECT_FAILED` | Failed to evaluate expression | Invalid expression or not paused | Check syntax and pause state |
-| `GET_STACK_FAILED` | Failed to get call stack | Not paused | Pause execution first |
-| `NOT_PAUSED` | Operation requires paused state | Process is running | Pause or set breakpoint |
-| `HANG_DETECTION_FAILED` | Failed to detect hang | Invalid parameters | Check timeout and interval |
-| `WATCH_NOT_FOUND` | Watch expression doesn't exist | Invalid watch ID | List watches to verify IDs |
-| `RATE_LIMIT_EXCEEDED` | Too many requests | Exceeded rate limit | Wait and retry |
-| `AUTH_FAILED` | Authentication failed | Invalid token | Check authentication token |
+| Error Code              | Description                     | Common Causes                    | Solution                           |
+| ----------------------- | ------------------------------- | -------------------------------- | ---------------------------------- |
+| `SESSION_NOT_FOUND`     | Session ID doesn't exist        | Invalid ID or terminated session | Start a new session                |
+| `SESSION_START_FAILED`  | Failed to start debug session   | Invalid command or permissions   | Check command and file paths       |
+| `BREAKPOINT_SET_FAILED` | Failed to set breakpoint        | Invalid file path or line number | Use absolute paths and valid lines |
+| `BREAKPOINT_NOT_FOUND`  | Breakpoint doesn't exist        | Invalid breakpoint ID            | List breakpoints to verify IDs     |
+| `CONTINUE_FAILED`       | Failed to resume execution      | Process crashed or terminated    | Check process status               |
+| `STEP_OVER_FAILED`      | Failed to step over             | Not paused or invalid state      | Ensure process is paused           |
+| `STEP_INTO_FAILED`      | Failed to step into             | Not paused or no function call   | Ensure at function call            |
+| `STEP_OUT_FAILED`       | Failed to step out              | Not in a function                | Check call stack                   |
+| `PAUSE_FAILED`          | Failed to pause execution       | Process not running              | Ensure process is running          |
+| `INSPECT_FAILED`        | Failed to evaluate expression   | Invalid expression or not paused | Check syntax and pause state       |
+| `GET_STACK_FAILED`      | Failed to get call stack        | Not paused                       | Pause execution first              |
+| `NOT_PAUSED`            | Operation requires paused state | Process is running               | Pause or set breakpoint            |
+| `HANG_DETECTION_FAILED` | Failed to detect hang           | Invalid parameters               | Check timeout and interval         |
+| `WATCH_NOT_FOUND`       | Watch expression doesn't exist  | Invalid watch ID                 | List watches to verify IDs         |
+| `RATE_LIMIT_EXCEEDED`   | Too many requests               | Exceeded rate limit              | Wait and retry                     |
+| `AUTH_FAILED`           | Authentication failed           | Invalid token                    | Check authentication token         |
 
 ## Testing
 
 ### Run Unit Tests
+
 ```bash
 npx nx test @ai-capabilities-suite/mcp-core
 npx nx test @ai-capabilities-suite/mcp-server
 ```
 
 ### Run E2E Tests
+
 ```bash
 npx nx test @ai-capabilities-suite/mcp-server --testPathPattern=e2e --testTimeout=60000
 ```
 
 ### Manual Testing
+
 ```bash
 node packages/mcp-server/test-mcp-manual.js
 ```
@@ -1004,19 +1099,19 @@ The MCP Debugger Server is built on enterprise-grade technologies:
 
 Performance metrics on a MacBook Pro (M1, 16GB RAM):
 
-| Operation | Average Latency | Throughput | Notes |
-|-----------|----------------|------------|-------|
-| Session Start | 150ms | 6.6/sec | Includes process spawn |
-| Set Breakpoint | 5ms | 200/sec | Single breakpoint |
-| Continue Execution | 2ms | 500/sec | Resume to next breakpoint |
-| Step Over | 8ms | 125/sec | Single step operation |
-| Variable Inspection | 12ms | 83/sec | Local variables only |
-| Expression Evaluation | 15ms | 66/sec | Simple expressions |
-| Call Stack Retrieval | 10ms | 100/sec | Full stack trace |
-| Hang Detection | 5000ms | 0.2/sec | With 5s timeout |
-| CPU Profile Start | 3ms | 333/sec | Start profiling |
-| CPU Profile Stop | 50ms | 20/sec | Includes analysis |
-| Heap Snapshot | 200ms | 5/sec | 10MB heap |
+| Operation             | Average Latency | Throughput | Notes                     |
+| --------------------- | --------------- | ---------- | ------------------------- |
+| Session Start         | 150ms           | 6.6/sec    | Includes process spawn    |
+| Set Breakpoint        | 5ms             | 200/sec    | Single breakpoint         |
+| Continue Execution    | 2ms             | 500/sec    | Resume to next breakpoint |
+| Step Over             | 8ms             | 125/sec    | Single step operation     |
+| Variable Inspection   | 12ms            | 83/sec     | Local variables only      |
+| Expression Evaluation | 15ms            | 66/sec     | Simple expressions        |
+| Call Stack Retrieval  | 10ms            | 100/sec    | Full stack trace          |
+| Hang Detection        | 5000ms          | 0.2/sec    | With 5s timeout           |
+| CPU Profile Start     | 3ms             | 333/sec    | Start profiling           |
+| CPU Profile Stop      | 50ms            | 20/sec     | Includes analysis         |
+| Heap Snapshot         | 200ms           | 5/sec      | 10MB heap                 |
 
 ### Resource Usage
 
@@ -1074,6 +1169,7 @@ This project builds upon excellent open-source technologies:
 - **[Zod](https://zod.dev/)** - Runtime type validation
 
 Special thanks to:
+
 - The MCP community for feedback and contributions
 - All contributors who have helped improve this project
 - Users who report issues and suggest improvements
@@ -1107,7 +1203,7 @@ SOFTWARE.
 - **Homepage**: https://digitaldefiance.org
 - **GitHub**: https://github.com/digital-defiance/ai-capabilities-suite
 - **NPM**: https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server
-- **Docker Hub**: https://hub.docker.com/r/digidefiance/mcp-debugger-server
+- **Docker Hub**: https://hub.docker.com/r/digitaldefiance/mcp-debugger-server
 - **Documentation**: https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server
 - **Issues**: https://github.com/digital-defiance/ai-capabilities-suite/issues
 - **Discussions**: https://github.com/digital-defiance/ai-capabilities-suite/discussions
@@ -1120,9 +1216,9 @@ SOFTWARE.
 
 [![GitHub Stars](https://img.shields.io/github/stars/digitaldefiance/ai-capabilities-suite?style=social)](https://github.com/digital-defiance/ai-capabilities-suite)
 [![NPM Downloads](https://img.shields.io/npm/dm/@ai-capabilities-suite/mcp-debugger-server)](https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server)
-[![Docker Pulls](https://img.shields.io/docker/pulls/digidefiance/mcp-debugger-server)](https://hub.docker.com/r/digidefiance/mcp-debugger-server)
+[![Docker Pulls](https://img.shields.io/docker/pulls/digitaldefiance/mcp-debugger-server)](https://hub.docker.com/r/digitaldefiance/mcp-debugger-server)
 
-[⭐ Star us on GitHub](https://github.com/digital-defiance/ai-capabilities-suite) | [📦 View on NPM](https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server) | [🐳 View on Docker Hub](https://hub.docker.com/r/digidefiance/mcp-debugger-server)
+[⭐ Star us on GitHub](https://github.com/digital-defiance/ai-capabilities-suite) | [📦 View on NPM](https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server) | [🐳 View on Docker Hub](https://hub.docker.com/r/digitaldefiance/mcp-debugger-server)
 
 </div>
 
@@ -1135,6 +1231,7 @@ A: MCP is a protocol that enables AI agents to interact with external tools and 
 
 **Q: Which AI agents are supported?**
 A: The server works with any MCP-compatible AI agent, including:
+
 - Kiro
 - Amazon Q
 - GitHub Copilot
@@ -1168,6 +1265,7 @@ A: Yes! We provide official Docker images. See [DOCKER-DEPLOYMENT.md](./DOCKER-D
 
 **Q: Why isn't my breakpoint hitting?**
 A: Common causes:
+
 1. File path is relative instead of absolute
 2. Line number doesn't have executable code
 3. Code path isn't executed
@@ -1175,6 +1273,7 @@ A: Common causes:
 
 **Q: How do I debug a specific test?**
 A: Start a debug session with your test runner:
+
 ```javascript
 {
   "tool": "debugger_start",
@@ -1190,6 +1289,7 @@ A: Yes! The debugger fully supports async/await, Promises, and callbacks. Set br
 
 **Q: How do I detect memory leaks?**
 A: Use the memory profiling tools:
+
 1. Take a heap snapshot at the start
 2. Run your code
 3. Take another heap snapshot
@@ -1236,12 +1336,12 @@ A: Yes! The server has built-in support for all major test frameworks. Just star
 - **🐛 Bug Reports**: [GitHub Issues](https://github.com/digital-defiance/ai-capabilities-suite/issues)
 - **💡 Feature Requests**: [GitHub Discussions](https://github.com/digital-defiance/ai-capabilities-suite/discussions)
 - **📧 Email Support**: info@digitaldefiance.org
-- **💬 Community Chat**: [Join our Discord](https://discord.gg/digitaldefiance) *(coming soon)*
+- **💬 Community Chat**: [Join our Discord](https://discord.gg/digitaldefiance) _(coming soon)_
 
 ### Resources
 
 - **NPM Package**: [@ai-capabilities-suite/mcp-debugger-server](https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server)
-- **Docker Hub**: [digidefiance/mcp-debugger-server](https://hub.docker.com/r/digidefiance/mcp-debugger-server)
+- **Docker Hub**: [digitaldefiance/mcp-debugger-server](https://hub.docker.com/r/digitaldefiance/mcp-debugger-server)
 - **GitHub Repository**: [ai-capabilities-suite](https://github.com/digital-defiance/ai-capabilities-suite)
 - **API Documentation**: [API.md](./API.md)
 - **Tool Reference**: [TOOL-REFERENCE.md](./TOOL-REFERENCE.md)
@@ -1253,62 +1353,75 @@ We welcome contributions! See [CONTRIBUTING.md](../../CONTRIBUTING.md) for guide
 ### Sponsorship
 
 Support the project:
+
 - **GitHub Sponsors**: [Sponsor Digital Defiance](https://github.com/sponsors/digitaldefiance)
-- **Open Collective**: [Support the project](https://opencollective.com/digitaldefiance) *(coming soon)*
+- **Open Collective**: [Support the project](https://opencollective.com/digitaldefiance) _(coming soon)_
 
 ## 📝 Changelog
 
 ### Version 1.0.4 (Current)
+
 **Release Date**: December 2025
 
 **New Features**:
+
 - Enhanced documentation with comprehensive examples
 - Improved error messages and troubleshooting guides
 - Added performance benchmarks and metrics
 - Enhanced security features documentation
 
 **Bug Fixes**:
+
 - Fixed WebSocket connection stability issues
 - Improved source map resolution for edge cases
 - Fixed memory leak in long-running sessions
 
 **Performance**:
+
 - Reduced session startup time by 20%
 - Optimized variable inspection for large objects
 - Improved CPU profiling accuracy
 
 ### Version 1.0.2
+
 **Release Date**: November 2024
 
 **New Features**:
+
 - Added Docker support with official images
 - Implemented Prometheus metrics export
 - Added health check endpoints
 - Enhanced audit logging with structured format
 
 **Improvements**:
+
 - Better error handling for CDP protocol errors
 - Improved TypeScript source map support
 - Enhanced session isolation
 
 ### Version 1.0.1
+
 **Release Date**: November 2024
 
 **New Features**:
+
 - Added CPU profiling support
 - Added memory profiling and heap snapshots
 - Implemented performance timeline tracking
 - Added advanced breakpoint types (logpoints, hit counts)
 
 **Improvements**:
+
 - Enhanced hang detection algorithm
 - Improved variable inspection performance
 - Better handling of async code
 
 ### Version 1.0.0
+
 **Release Date**: October 2024
 
 **Initial Release**:
+
 - 25 comprehensive debugging tools
 - Full TypeScript support with source maps
 - Hang detection with configurable sampling
@@ -1324,6 +1437,7 @@ Support the project:
 ## 🗺️ Roadmap
 
 ### Version 1.1.0 (Planned - Q1 2025)
+
 - [ ] Time-travel debugging (record and replay)
 - [ ] Smart breakpoint suggestions using AI
 - [ ] Enhanced VS Code extension
@@ -1331,6 +1445,7 @@ Support the project:
 - [ ] Distributed tracing integration
 
 ### Version 1.2.0 (Planned - Q2 2025)
+
 - [ ] Browser debugging support (Chrome, Firefox)
 - [ ] Mobile debugging (React Native)
 - [ ] Collaborative debugging sessions
@@ -1338,6 +1453,7 @@ Support the project:
 - [ ] Plugin system for custom tools
 
 ### Version 2.0.0 (Planned - Q3 2025)
+
 - [ ] Multi-language support (Python, Go, Rust)
 - [ ] Cloud-native debugging
 - [ ] Kubernetes integration

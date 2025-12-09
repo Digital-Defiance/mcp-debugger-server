@@ -21,14 +21,14 @@ This guide covers deploying the MCP Debugger Server using Docker for containeriz
 
 ```bash
 # Pull the latest image
-docker pull digidefiance/mcp-debugger-server:latest
+docker pull digitaldefiance/mcp-debugger-server:latest
 
 # Run the container
 docker run -d \
   --name mcp-debugger \
   -p 3000:3000 \
   -v $(pwd)/workspace:/workspace:ro \
-  digidefiance/mcp-debugger-server:latest
+  digitaldefiance/mcp-debugger-server:latest
 ```
 
 ### Using Docker Compose
@@ -83,11 +83,11 @@ docker buildx build \
 ### Basic Configuration
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   mcp-debugger:
-    image: digidefiance/mcp-debugger-server:latest
+    image: digitaldefiance/mcp-debugger-server:latest
     container_name: mcp-debugger-server
     restart: unless-stopped
     ports:
@@ -114,29 +114,29 @@ docker-compose --profile monitoring up -d
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `NODE_ENV` | `production` | Node.js environment |
-| `LOG_LEVEL` | `info` | Logging level (debug, info, warn, error) |
-| `PORT` | `3000` | Service port |
-| `MCP_AUTH_ENABLED` | `false` | Enable authentication |
-| `MCP_AUTH_TOKEN` | - | Authentication token |
-| `MCP_RATE_LIMIT_ENABLED` | `false` | Enable rate limiting |
-| `MCP_RATE_LIMIT_MAX_REQUESTS` | `100` | Max requests per window |
-| `MCP_RATE_LIMIT_WINDOW_MS` | `60000` | Rate limit window (ms) |
-| `MCP_SESSION_TIMEOUT_MS` | `3600000` | Session timeout (ms) |
-| `MCP_METRICS_ENABLED` | `false` | Enable Prometheus metrics |
-| `MCP_METRICS_PORT` | `9090` | Metrics endpoint port |
+| Variable                      | Default      | Description                              |
+| ----------------------------- | ------------ | ---------------------------------------- |
+| `NODE_ENV`                    | `production` | Node.js environment                      |
+| `LOG_LEVEL`                   | `info`       | Logging level (debug, info, warn, error) |
+| `PORT`                        | `3000`       | Service port                             |
+| `MCP_AUTH_ENABLED`            | `false`      | Enable authentication                    |
+| `MCP_AUTH_TOKEN`              | -            | Authentication token                     |
+| `MCP_RATE_LIMIT_ENABLED`      | `false`      | Enable rate limiting                     |
+| `MCP_RATE_LIMIT_MAX_REQUESTS` | `100`        | Max requests per window                  |
+| `MCP_RATE_LIMIT_WINDOW_MS`    | `60000`      | Rate limit window (ms)                   |
+| `MCP_SESSION_TIMEOUT_MS`      | `3600000`    | Session timeout (ms)                     |
+| `MCP_METRICS_ENABLED`         | `false`      | Enable Prometheus metrics                |
+| `MCP_METRICS_PORT`            | `9090`       | Metrics endpoint port                    |
 
 ### Example with Authentication
 
 ```yaml
 services:
   mcp-debugger:
-    image: digidefiance/mcp-debugger-server:latest
+    image: digitaldefiance/mcp-debugger-server:latest
     environment:
       - MCP_AUTH_ENABLED=true
-      - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN}  # Set in .env file
+      - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN} # Set in .env file
       - MCP_RATE_LIMIT_ENABLED=true
       - MCP_RATE_LIMIT_MAX_REQUESTS=100
 ```
@@ -155,13 +155,13 @@ MCP_AUTH_TOKEN=your-secret-token-here
 volumes:
   # Workspace (read-only) - code to debug
   - ./workspace:/workspace:ro
-  
+
   # Logs (read-write) - application logs
   - ./logs:/app/logs
-  
+
   # Config (read-only) - custom configuration
   - ./config:/app/config:ro
-  
+
   # Temp (tmpfs) - temporary files
   - type: tmpfs
     target: /tmp
@@ -181,8 +181,8 @@ The container is designed to be stateless. Debug sessions are ephemeral and don'
 
 ```yaml
 ports:
-  - "3000:3000"    # Main service (stdio-based MCP)
-  - "9090:9090"    # Metrics endpoint (if enabled)
+  - "3000:3000" # Main service (stdio-based MCP)
+  - "9090:9090" # Metrics endpoint (if enabled)
 ```
 
 ### Custom Network
@@ -203,7 +203,7 @@ services:
   mcp-debugger:
     networks:
       - mcp-network
-  
+
   your-app:
     networks:
       - mcp-network
@@ -233,7 +233,7 @@ tmpfs:
 cap_drop:
   - ALL
 cap_add:
-  - NET_BIND_SERVICE  # Only if needed
+  - NET_BIND_SERVICE # Only if needed
 ```
 
 ### Secrets Management
@@ -375,7 +375,7 @@ Run container in debug mode:
 docker run -it --rm \
   -e LOG_LEVEL=debug \
   -e NODE_ENV=development \
-  digidefiance/mcp-debugger-server:latest
+  digitaldefiance/mcp-debugger-server:latest
 ```
 
 ## Production Deployment
@@ -400,38 +400,38 @@ spec:
         app: mcp-debugger
     spec:
       containers:
-      - name: mcp-debugger
-        image: digidefiance/mcp-debugger-server:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: NODE_ENV
-          value: "production"
-        - name: LOG_LEVEL
-          value: "info"
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "2Gi"
-            cpu: "2000m"
-        livenessProbe:
-          exec:
-            command:
-            - node
-            - -e
-            - process.exit(0)
-          initialDelaySeconds: 5
-          periodSeconds: 30
-        readinessProbe:
-          exec:
-            command:
-            - node
-            - -e
-            - process.exit(0)
-          initialDelaySeconds: 5
-          periodSeconds: 10
+        - name: mcp-debugger
+          image: digitaldefiance/mcp-debugger-server:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: LOG_LEVEL
+              value: "info"
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"
+          livenessProbe:
+            exec:
+              command:
+                - node
+                - -e
+                - process.exit(0)
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command:
+                - node
+                - -e
+                - process.exit(0)
+            initialDelaySeconds: 5
+            periodSeconds: 10
 ```
 
 ### Docker Swarm
@@ -447,7 +447,7 @@ docker stack deploy -c docker-compose.yml mcp-stack
 docker service scale mcp-stack_mcp-debugger=3
 
 # Update service
-docker service update --image digidefiance/mcp-debugger-server:v1.1.0 mcp-stack_mcp-debugger
+docker service update --image digitaldefiance/mcp-debugger-server:v1.1.0 mcp-stack_mcp-debugger
 ```
 
 ### High Availability
@@ -469,22 +469,22 @@ For production HA setup:
 environment:
   - NODE_ENV=production
   - NODE_OPTIONS=--max-old-space-size=2048
-  
+
 deploy:
   resources:
     limits:
-      cpus: '4'
+      cpus: "4"
       memory: 4G
     reservations:
-      cpus: '1'
+      cpus: "1"
       memory: 1G
-  
+
   # Update strategy
   update_config:
     parallelism: 1
     delay: 10s
     failure_action: rollback
-  
+
   # Restart policy
   restart_policy:
     condition: on-failure

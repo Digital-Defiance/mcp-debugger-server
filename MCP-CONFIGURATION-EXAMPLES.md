@@ -161,9 +161,7 @@ Use NPX to run without installing:
   "mcpServers": {
     "debugger": {
       "command": "npx",
-      "args": [
-        "@ai-capabilities-suite/mcp-debugger-server"
-      ]
+      "args": ["@ai-capabilities-suite/mcp-debugger-server"]
     }
   }
 }
@@ -224,7 +222,7 @@ Use Docker container for Amazon Q:
           "--rm",
           "-v",
           "${workspaceFolder}:/workspace",
-          "digidefiance/mcp-debugger-server:latest"
+          "digitaldefiance/mcp-debugger-server:latest"
         ],
         "transport": "stdio"
       }
@@ -349,37 +347,40 @@ Enable Copilot agent mode for debugging:
 ### Node.js Client
 
 ```javascript
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { spawn } from 'child_process';
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { spawn } from "child_process";
 
 // Create transport
-const serverProcess = spawn('ts-mcp-server', [], {
-  stdio: ['pipe', 'pipe', 'pipe']
+const serverProcess = spawn("ts-mcp-server", [], {
+  stdio: ["pipe", "pipe", "pipe"],
 });
 
 const transport = new StdioClientTransport({
   reader: serverProcess.stdout,
-  writer: serverProcess.stdin
+  writer: serverProcess.stdin,
 });
 
 // Create client
-const client = new Client({
-  name: 'my-debugger-client',
-  version: '1.0.0'
-}, {
-  capabilities: {
-    tools: {}
+const client = new Client(
+  {
+    name: "my-debugger-client",
+    version: "1.0.0",
+  },
+  {
+    capabilities: {
+      tools: {},
+    },
   }
-});
+);
 
 // Connect
 await client.connect(transport);
 
 // Use tools
-const result = await client.callTool('debugger_start', {
-  command: 'node',
-  args: ['app.js']
+const result = await client.callTool("debugger_start", {
+  command: "node",
+  args: ["app.js"],
 });
 
 console.log(result);
@@ -400,7 +401,7 @@ class MCPDebuggerClient:
             stderr=subprocess.PIPE,
             text=True
         )
-    
+
     def call_tool(self, tool_name, arguments):
         request = {
             'jsonrpc': '2.0',
@@ -411,13 +412,13 @@ class MCPDebuggerClient:
                 'arguments': arguments
             }
         }
-        
+
         self.process.stdin.write(json.dumps(request) + '\n')
         self.process.stdin.flush()
-        
+
         response = json.loads(self.process.stdout.readline())
         return response['result']
-    
+
     def close(self):
         self.process.terminate()
 
@@ -435,21 +436,22 @@ client.close()
 
 ### Available Variables
 
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `MCP_LOG_LEVEL` | Logging level | `info` | `debug`, `info`, `warn`, `error` |
-| `MCP_AUTH_TOKEN` | Authentication token | None | `your-secret-token` |
-| `MCP_RATE_LIMIT` | Rate limit (requests/min) | Unlimited | `100` |
-| `MCP_AUDIT_LOG` | Enable audit logging | `false` | `true`, `false` |
-| `MCP_SESSION_TIMEOUT` | Session timeout (ms) | `3600000` | `1800000` |
-| `MCP_MAX_SESSIONS` | Max concurrent sessions | `100` | `50` |
-| `MCP_ENABLE_PROFILING` | Enable profiling | `true` | `true`, `false` |
-| `MCP_ENABLE_METRICS` | Enable metrics | `true` | `true`, `false` |
-| `DEBUG` | Debug namespaces | None | `mcp:*`, `mcp:server` |
+| Variable               | Description               | Default   | Example                          |
+| ---------------------- | ------------------------- | --------- | -------------------------------- |
+| `MCP_LOG_LEVEL`        | Logging level             | `info`    | `debug`, `info`, `warn`, `error` |
+| `MCP_AUTH_TOKEN`       | Authentication token      | None      | `your-secret-token`              |
+| `MCP_RATE_LIMIT`       | Rate limit (requests/min) | Unlimited | `100`                            |
+| `MCP_AUDIT_LOG`        | Enable audit logging      | `false`   | `true`, `false`                  |
+| `MCP_SESSION_TIMEOUT`  | Session timeout (ms)      | `3600000` | `1800000`                        |
+| `MCP_MAX_SESSIONS`     | Max concurrent sessions   | `100`     | `50`                             |
+| `MCP_ENABLE_PROFILING` | Enable profiling          | `true`    | `true`, `false`                  |
+| `MCP_ENABLE_METRICS`   | Enable metrics            | `true`    | `true`, `false`                  |
+| `DEBUG`                | Debug namespaces          | None      | `mcp:*`, `mcp:server`            |
 
 ### Setting Environment Variables
 
 **Linux/macOS:**
+
 ```bash
 export MCP_LOG_LEVEL=debug
 export MCP_AUTH_TOKEN=your-secret-token
@@ -457,6 +459,7 @@ ts-mcp-server
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
 $env:MCP_LOG_LEVEL="debug"
 $env:MCP_AUTH_TOKEN="your-secret-token"
@@ -464,6 +467,7 @@ ts-mcp-server
 ```
 
 **In Configuration File:**
+
 ```json
 {
   "mcpServers": {
@@ -616,11 +620,11 @@ Configuration for monorepo debugging:
 Create `docker-compose.yml`:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   mcp-debugger:
-    image: digidefiance/mcp-debugger-server:latest
+    image: digitaldefiance/mcp-debugger-server:latest
     stdin_open: true
     tty: true
     volumes:
@@ -644,13 +648,7 @@ Configuration to use Docker Compose:
   "mcpServers": {
     "debugger": {
       "command": "docker-compose",
-      "args": [
-        "-f",
-        "docker-compose.yml",
-        "run",
-        "--rm",
-        "mcp-debugger"
-      ]
+      "args": ["-f", "docker-compose.yml", "run", "--rm", "mcp-debugger"]
     }
   }
 }
@@ -676,20 +674,20 @@ spec:
         app: mcp-debugger
     spec:
       containers:
-      - name: mcp-debugger
-        image: digidefiance/mcp-debugger-server:latest
-        env:
-        - name: MCP_LOG_LEVEL
-          value: "info"
-        - name: MCP_AUTH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: mcp-secrets
-              key: auth-token
-        - name: MCP_RATE_LIMIT
-          value: "100"
-        ports:
-        - containerPort: 3000
+        - name: mcp-debugger
+          image: digitaldefiance/mcp-debugger-server:latest
+          env:
+            - name: MCP_LOG_LEVEL
+              value: "info"
+            - name: MCP_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-secrets
+                  key: auth-token
+            - name: MCP_RATE_LIMIT
+              value: "100"
+          ports:
+            - containerPort: 3000
 ```
 
 ### With Systemd (Linux)
@@ -729,18 +727,20 @@ Create `ecosystem.config.js`:
 
 ```javascript
 module.exports = {
-  apps: [{
-    name: 'mcp-debugger',
-    script: 'ts-mcp-server',
-    instances: 4,
-    exec_mode: 'cluster',
-    env: {
-      NODE_ENV: 'production',
-      MCP_LOG_LEVEL: 'info',
-      MCP_AUTH_TOKEN: process.env.MCP_AUTH_TOKEN,
-      MCP_RATE_LIMIT: '100'
-    }
-  }]
+  apps: [
+    {
+      name: "mcp-debugger",
+      script: "ts-mcp-server",
+      instances: 4,
+      exec_mode: "cluster",
+      env: {
+        NODE_ENV: "production",
+        MCP_LOG_LEVEL: "info",
+        MCP_AUTH_TOKEN: process.env.MCP_AUTH_TOKEN,
+        MCP_RATE_LIMIT: "100",
+      },
+    },
+  ],
 };
 ```
 
@@ -757,12 +757,14 @@ pm2 startup
 ### Issue: Server Not Starting
 
 **Check configuration syntax:**
+
 ```bash
 # Validate JSON
 cat .kiro/settings/mcp.json | jq .
 ```
 
 **Check server installation:**
+
 ```bash
 # Verify installation
 ts-mcp-server --version
@@ -774,6 +776,7 @@ ts-mcp-server
 ### Issue: Connection Timeout
 
 **Increase timeout in configuration:**
+
 ```json
 {
   "mcpServers": {
@@ -789,6 +792,7 @@ ts-mcp-server
 ### Issue: Authentication Errors
 
 **Verify token is set:**
+
 ```bash
 # Check environment variable
 echo $MCP_AUTH_TOKEN
@@ -800,6 +804,7 @@ export MCP_AUTH_TOKEN=your-secret-token
 ### Issue: Rate Limit Exceeded
 
 **Increase rate limit:**
+
 ```json
 {
   "mcpServers": {
@@ -817,6 +822,7 @@ export MCP_AUTH_TOKEN=your-secret-token
 ### Issue: Debug Logging
 
 **Enable debug logging:**
+
 ```json
 {
   "mcpServers": {

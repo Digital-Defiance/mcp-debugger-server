@@ -1,5 +1,5 @@
 name: ts-mcp-debugger
-image: digidefiance/mcp-debugger-server
+image: digitaldefiance/mcp-debugger-server
 type: server
 meta:
   category: debugging

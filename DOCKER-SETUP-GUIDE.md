@@ -24,7 +24,7 @@ This guide walks you through the manual steps required to set up Docker Hub publ
    - **Visibility:** Public (or Private if preferred)
 3. Click "Create"
 
-Your repository will be available at: `digidefiance/mcp-debugger-server`
+Your repository will be available at: `digitaldefiance/mcp-debugger-server`
 
 ## Step 3: Create Docker Hub Access Token
 
@@ -69,13 +69,13 @@ Before pushing to Docker Hub, test the build locally:
 cd /path/to/ai-capabilities-suite
 
 # Build the image
-docker build -t digidefiance/mcp-debugger-server:test -f packages/mcp-debugger-server/Dockerfile .
+docker build -t digitaldefiance/mcp-debugger-server:test -f packages/mcp-debugger-server/Dockerfile .
 
 # Test the image
-docker run --rm digidefiance/mcp-debugger-server:test node --version
+docker run --rm digitaldefiance/mcp-debugger-server:test node --version
 
 # Test the CLI
-docker run --rm digidefiance/mcp-debugger-server:test node dist/src/cli.js --help
+docker run --rm digitaldefiance/mcp-debugger-server:test node dist/src/cli.js --help
 ```
 
 ## Step 6: Manual First Push (Optional)
@@ -84,17 +84,17 @@ You can manually push the first image before setting up CI/CD:
 
 ```bash
 # Log in to Docker Hub
-docker login -u digidefiance
+docker login -u digitaldefiance
 
 # Tag the image
-docker tag digidefiance/mcp-debugger-server:test digidefiance/mcp-debugger-server:latest
+docker tag digitaldefiance/mcp-debugger-server:test digitaldefiance/mcp-debugger-server:latest
 
 # Push to Docker Hub
-docker push digidefiance/mcp-debugger-server:latest
+docker push digitaldefiance/mcp-debugger-server:latest
 
 # Push with version tag
-docker tag digidefiance/mcp-debugger-server:test digidefiance/mcp-debugger-server:v1.0.0
-docker push digidefiance/mcp-debugger-server:v1.0.0
+docker tag digitaldefiance/mcp-debugger-server:test digitaldefiance/mcp-debugger-server:v1.0.0
+docker push digitaldefiance/mcp-debugger-server:v1.0.0
 ```
 
 ## Step 7: Trigger GitHub Actions Workflow
@@ -122,6 +122,7 @@ git push origin v1.0.0
 ```
 
 This will automatically:
+
 - Build the Docker image
 - Run security scans
 - Push to Docker Hub with multiple tags
@@ -129,7 +130,7 @@ This will automatically:
 
 ## Step 8: Verify Deployment
 
-1. Go to [Docker Hub](https://hub.docker.com/r/digidefiance/mcp-debugger-server)
+1. Go to [Docker Hub](https://hub.docker.com/r/digitaldefiance/mcp-debugger-server)
 2. Verify the image is published
 3. Check the tags are correct
 4. Verify the description is updated
@@ -138,10 +139,10 @@ This will automatically:
 
 ```bash
 # Pull the published image
-docker pull digidefiance/mcp-debugger-server:latest
+docker pull digitaldefiance/mcp-debugger-server:latest
 
 # Run it
-docker run -d --name mcp-test digidefiance/mcp-debugger-server:latest
+docker run -d --name mcp-test digitaldefiance/mcp-debugger-server:latest
 
 # Check logs
 docker logs mcp-test
@@ -183,13 +184,13 @@ docker login -u digitaldefiance
 
 ```bash
 # Check image size
-docker images digidefiance/mcp-debugger-server
+docker images digitaldefiance/mcp-debugger-server
 
 # Analyze layers
-docker history digidefiance/mcp-debugger-server:latest
+docker history digitaldefiance/mcp-debugger-server:latest
 
 # Use dive for detailed analysis
-dive digidefiance/mcp-debugger-server:latest
+dive digitaldefiance/mcp-debugger-server:latest
 ```
 
 ### Security Scan Failures
@@ -212,7 +213,7 @@ docker buildx create --name multiarch --use
 # Build and push for multiple platforms
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
-  -t digidefiance/mcp-debugger-server:latest \
+  -t digitaldefiance/mcp-debugger-server:latest \
   -f packages/mcp-debugger-server/Dockerfile \
   --push \
   .
@@ -239,7 +240,7 @@ Follow semantic versioning:
 
 ```bash
 # List all tags
-docker images digidefiance/mcp-debugger-server
+docker images digitaldefiance/mcp-debugger-server
 
 # Remove old tags from Docker Hub
 # (Use Docker Hub UI or API)
