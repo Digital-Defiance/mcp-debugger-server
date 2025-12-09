@@ -1,8 +1,9 @@
 {
   "name": "@ai-capabilities-suite/mcp-debugger-server",
-  "version": "1.1.13",
+  "version": "1.1.14",
   "packageManager": "yarn@4.12.0",
   "mcpName": "io.github.Digital-Defiance/mcp-debugger",
+  "homepage": "https://github.com/Digital-Defiance/mcp-debugger-server",
   "description": "Enterprise-grade MCP server providing advanced debugging capabilities for Node.js and JavaScript applications via Chrome DevTools Protocol. Features 25+ debugging tools including breakpoints, variable inspection, execution control, CPU/memory profiling, hang detection, TypeScript source map support, and comprehensive observability. For multi-language debugging, use the VS Code extension.",
   "main": "./dist/src/index.js",
   "module": "./dist/src/index.js",
@@ -128,11 +129,9 @@
     }
   ],
   "license": "MIT",
-  "homepage": "https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/digital-defiance/ai-capabilities-suite.git",
-    "directory": "packages/mcp-debugger-server"
+    "url": "git+https://github.com/digital-defiance/mcp-debugger-server.git"
   },
   "bugs": {
     "url": "https://github.com/digital-defiance/ai-capabilities-suite/issues",
@@ -188,7 +187,7 @@
     }
   },
   "dependencies": {
-    "@ai-capabilities-suite/mcp-debugger-core": "^1.0.12",
+    "@ai-capabilities-suite/mcp-debugger-core": "^1.0.15",
     "@modelcontextprotocol/sdk": "^1.23.0",
     "tslib": "^2.3.0",
     "zod": "^4.1.13"

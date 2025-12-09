@@ -5,14 +5,14 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@ai-capabilities-suite/mcp-debugger-core@npm:^1.0.12":
-  version: 1.0.12
-  resolution: "@ai-capabilities-suite/mcp-debugger-core@npm:1.0.12"
+"@ai-capabilities-suite/mcp-debugger-core@npm:^1.0.15":
+  version: 1.0.15
+  resolution: "@ai-capabilities-suite/mcp-debugger-core@npm:1.0.15"
   dependencies:
     source-map: "npm:^0.7.4"
     tslib: "npm:^2.3.0"
     ws: "npm:^8.18.3"
-  checksum: 10c0/0c7ae2562bb2e991906e178a7ca31ab4749a0d50733ab1792f8e171ff93fd6abd0470c9ad27ceac6419725cfd5836f85516b6f94a166fb3323c67d0fec5e228f
+  checksum: 10c0/a58c75c73a733d3a7b569bcc4385376fa5f9578c5ed00670efa62f4595f44b7e5ddd8306e45ad41ba835e2935d73eac2306916015ce5e87b3ed14c6c1ba62b2d
   conditions: (os=darwin | os=linux | os=win32) & (cpu=x64 | cpu=arm64)
   languageName: node
   linkType: hard
@@ -21,7 +21,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ai-capabilities-suite/mcp-debugger-server@workspace:."
   dependencies:
-    "@ai-capabilities-suite/mcp-debugger-core": "npm:^1.0.12"
+    "@ai-capabilities-suite/mcp-debugger-core": "npm:^1.0.15"
     "@modelcontextprotocol/sdk": "npm:^1.23.0"
     "@swc/core": "npm:^1.15.3"
     "@swc/helpers": "npm:^0.5.15"
