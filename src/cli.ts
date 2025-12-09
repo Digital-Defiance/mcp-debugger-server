@@ -9,7 +9,7 @@
 
 import { startMcpDebuggerServer } from "./lib/mcp-server.js";
 
-const VERSION = "1.1.14";
+const VERSION = "1.1.16";
 
 function printHelp(): void {
   console.log(`
