@@ -14,7 +14,7 @@ RUN addgroup -g 1001 -S mcp && \
 WORKDIR /app
 
 # Install the published package from NPM
-RUN npm install -g @ai-capabilities-suite/mcp-debugger-server@1.1.16
+RUN npm install -g @ai-capabilities-suite/mcp-debugger-server@1.5.20
 
 # Set environment variables
 ENV NODE_ENV=production \
@@ -36,7 +36,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 # Labels for metadata
 LABEL org.opencontainers.image.title="MCP ACS Debugger Server" \
       org.opencontainers.image.description="Enterprise-grade MCP server for Node.js and TypeScript debugging" \
-      org.opencontainers.image.version="1.1.16" \
+      org.opencontainers.image.version="1.5.20" \
       org.opencontainers.image.vendor="Digital Defiance" \
       org.opencontainers.image.authors="Jessica Mulein <jessica@digitaldefiance.org>" \
       org.opencontainers.image.url="https://github.com/digital-defiance/ai-capabilities-suite" \
