@@ -1,6 +1,6 @@
 {
   "name": "@ai-capabilities-suite/mcp-debugger-server",
-  "version": "1.5.20",
+  "version": "1.5.21",
   "packageManager": "yarn@4.12.0",
   "mcpName": "io.github.Digital-Defiance/mcp-debugger",
   "homepage": "https://github.com/Digital-Defiance/mcp-debugger-server",
