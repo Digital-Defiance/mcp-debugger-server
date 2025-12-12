@@ -23,7 +23,7 @@ export class McpDebuggerServer {
     this.server = new McpServer(
       {
         name: "debugger-server",
-        version: "1.5.22",
+        version: "1.5.23",
       },
       {
         capabilities: {

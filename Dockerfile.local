@@ -60,7 +60,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 # Labels for metadata
 LABEL org.opencontainers.image.title="MCP ACS Debugger Server" \
       org.opencontainers.image.description="Enterprise-grade MCP server for Node.js and TypeScript debugging" \
-      org.opencontainers.image.version="1.5.22" \
+      org.opencontainers.image.version="1.5.23" \
       org.opencontainers.image.vendor="Digital Defiance" \
       org.opencontainers.image.authors="Jessica Mulein <jessica@digitaldefiance.org>" \
       org.opencontainers.image.url="https://github.com/digital-defiance/ai-capabilities-suite" \
