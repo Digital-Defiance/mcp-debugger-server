@@ -4,7 +4,7 @@ import * as path from "path";
 /**
  * Minimal E2E test to debug the issue
  */
-describe("MCP Debugger Server - Minimal E2E", () => {
+describe("MCP ACS Debugger Server - Minimal E2E", () => {
   let serverProcess: ChildProcess;
   let messageId = 0;
 

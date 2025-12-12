@@ -1,6 +1,6 @@
 # Docker Quick Reference
 
-Quick commands and references for Docker deployment of MCP Debugger Server.
+Quick commands and references for Docker deployment of MCP ACS Debugger Server.
 
 ## Quick Start Commands
 
@@ -192,6 +192,6 @@ snyk container test digitaldefiance/mcp-debugger-server:latest
 
 ## Support
 
-- GitHub: https://github.com/digital-defiance/ai-capabilities-suite
-- Issues: https://github.com/digital-defiance/ai-capabilities-suite/issues
-- Email: info@digitaldefiance.org
+- GitHub: <https://github.com/digital-defiance/ai-capabilities-suite>
+- Issues: <https://github.com/digital-defiance/ai-capabilities-suite/issues>
+- Email: <info@digitaldefiance.org>

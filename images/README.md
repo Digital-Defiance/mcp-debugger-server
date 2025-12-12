@@ -1,14 +1,16 @@
-# MCP Debugger Server - Images & Screenshots
+# MCP ACS Debugger Server - Images & Screenshots
 
-This directory contains images, screenshots, and animated GIFs for the MCP Debugger Server documentation.
+This directory contains images, screenshots, and animated GIFs for the MCP ACS Debugger Server documentation.
 
 ## Required Images
 
 To complete the documentation, please add the following images:
 
 ### 1. Debugging Session Demo
+
 **Filename**: `debugging-session.gif` or `debugging-session.png`
 **Description**: Shows a complete debugging session including:
+
 - Starting a debug session
 - Setting a breakpoint
 - Pausing at the breakpoint
@@ -19,8 +21,10 @@ To complete the documentation, please add the following images:
 **Format**: Animated GIF (preferred) or PNG
 
 ### 2. Hang Detection Demo
+
 **Filename**: `hang-detection.gif` or `hang-detection.png`
 **Description**: Demonstrates hang detection in action:
+
 - Running a script with an infinite loop
 - Hang detection triggering
 - Displaying the hang location and stack trace
@@ -29,8 +33,10 @@ To complete the documentation, please add the following images:
 **Format**: Animated GIF (preferred) or PNG
 
 ### 3. TypeScript Debugging Demo
+
 **Filename**: `typescript-debugging.gif` or `typescript-debugging.png`
 **Description**: Shows TypeScript debugging with source maps:
+
 - Setting breakpoints in .ts files
 - Inspecting variables with TypeScript names
 - Source map location mapping
@@ -39,8 +45,10 @@ To complete the documentation, please add the following images:
 **Format**: Animated GIF (preferred) or PNG
 
 ### 4. AI Agent Integration
+
 **Filename**: `ai-agent-integration.gif` or `ai-agent-integration.png`
 **Description**: Shows an AI agent using the debugger:
+
 - AI agent receiving debugging request
 - Agent using MCP tools
 - Debugging results displayed to user
@@ -49,8 +57,10 @@ To complete the documentation, please add the following images:
 **Format**: Animated GIF (preferred) or PNG
 
 ### 5. Performance Profiling
+
 **Filename**: `performance-profiling.gif` or `performance-profiling.png`
 **Description**: Demonstrates performance profiling:
+
 - Starting CPU profiling
 - Running code
 - Viewing profiling results
@@ -112,16 +122,19 @@ convert input.gif -fuzz 10% -layers Optimize output.gif
 Once you've added images, update the main README.md:
 
 1. Replace placeholder image URLs with actual image paths:
+
    ```markdown
    ![Debugging Session](./images/debugging-session.gif)
    ```
 
 2. Add alt text for accessibility:
+
    ```markdown
    ![Debugging Session - Setting breakpoints and inspecting variables](./images/debugging-session.gif)
    ```
 
 3. Consider adding captions:
+
    ```markdown
    ![Debugging Session](./images/debugging-session.gif)
    *Setting breakpoints and inspecting variables in a Node.js application*
@@ -142,6 +155,7 @@ Once you've added images, update the main README.md:
 ## Questions?
 
 If you need help creating or optimizing images, please:
+
 - Open an issue on GitHub
-- Email info@digitaldefiance.org
+- Email <info@digitaldefiance.org>
 - Check the [CONTRIBUTING.md](../../CONTRIBUTING.md) guide

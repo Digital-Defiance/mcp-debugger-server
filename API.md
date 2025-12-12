@@ -1,8 +1,8 @@
-# MCP Debugger Server - API Documentation
+# MCP ACS Debugger Server - API Documentation
 
 ## Overview
 
-This document provides detailed API documentation for the MCP Debugger Server, including JSDoc-style documentation for all public APIs, CDP protocol interactions, and error codes.
+This document provides detailed API documentation for the MCP ACS Debugger Server, including JSDoc-style documentation for all public APIs, CDP protocol interactions, and error codes.
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ The main server class that implements the MCP protocol and exposes debugging too
 
 ```typescript
 /**
- * MCP Debugger Server
+ * MCP ACS Debugger Server
  * 
  * Provides debugging capabilities for Node.js and TypeScript applications
  * through the Model Context Protocol.
@@ -33,7 +33,7 @@ The main server class that implements the MCP protocol and exposes debugging too
  */
 class McpDebuggerServer {
   /**
-   * Creates a new MCP Debugger Server instance
+   * Creates a new MCP ACS Debugger Server instance
    * 
    * Initializes the MCP server with debugging capabilities and registers
    * all available debugging tools.
@@ -432,16 +432,18 @@ class HangDetector {
 
 ## CDP Protocol Interactions
 
-The MCP Debugger Server uses the Chrome DevTools Protocol (CDP) to communicate with the Node.js Inspector. Below are the key CDP domains and commands used.
+The MCP ACS Debugger Server uses the Chrome DevTools Protocol (CDP) to communicate with the Node.js Inspector. Below are the key CDP domains and commands used.
 
 ### Debugger Domain
 
 The Debugger domain provides debugging functionality.
 
 #### Debugger.enable
+
 Enables the debugger for the target.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.enable"
@@ -452,9 +454,11 @@ Enables the debugger for the target.
 Called during session initialization to enable debugging capabilities.
 
 #### Debugger.setBreakpointByUrl
+
 Sets a breakpoint at a specific URL and line number.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.setBreakpointByUrl",
@@ -468,6 +472,7 @@ Sets a breakpoint at a specific URL and line number.
 ```
 
 **Response:**
+
 ```json
 {
   "breakpointId": "1:41:0:file:///path/to/file.js",
@@ -485,9 +490,11 @@ Sets a breakpoint at a specific URL and line number.
 Called by `setBreakpoint()` to create breakpoints.
 
 #### Debugger.removeBreakpoint
+
 Removes a breakpoint by ID.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.removeBreakpoint",
@@ -501,9 +508,11 @@ Removes a breakpoint by ID.
 Called by `removeBreakpoint()` to delete breakpoints.
 
 #### Debugger.resume
+
 Resumes execution.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.resume"
@@ -514,9 +523,11 @@ Resumes execution.
 Called by `resume()` to continue execution.
 
 #### Debugger.stepOver
+
 Steps over the current line.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.stepOver"
@@ -527,9 +538,11 @@ Steps over the current line.
 Called by `stepOver()` to execute the current line and pause at the next.
 
 #### Debugger.stepInto
+
 Steps into the current line.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.stepInto"
@@ -540,9 +553,11 @@ Steps into the current line.
 Called by `stepInto()` to step into function calls.
 
 #### Debugger.stepOut
+
 Steps out of the current function.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.stepOut"
@@ -553,9 +568,11 @@ Steps out of the current function.
 Called by `stepOut()` to return from the current function.
 
 #### Debugger.pause
+
 Pauses execution.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.pause"
@@ -566,9 +583,11 @@ Pauses execution.
 Called by `pause()` to interrupt running execution.
 
 #### Debugger.evaluateOnCallFrame
+
 Evaluates an expression in the context of a call frame.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Debugger.evaluateOnCallFrame",
@@ -581,6 +600,7 @@ Evaluates an expression in the context of a call frame.
 ```
 
 **Response:**
+
 ```json
 {
   "result": {
@@ -594,9 +614,11 @@ Evaluates an expression in the context of a call frame.
 Called by `evaluateExpression()` to evaluate expressions.
 
 #### Debugger.paused (Event)
+
 Fired when execution pauses.
 
 **CDP Event:**
+
 ```json
 {
   "method": "Debugger.paused",
@@ -622,9 +644,11 @@ Fired when execution pauses.
 Listened to by the session to update state and call frames.
 
 #### Debugger.resumed (Event)
+
 Fired when execution resumes.
 
 **CDP Event:**
+
 ```json
 {
   "method": "Debugger.resumed"
@@ -639,9 +663,11 @@ Listened to by the session to update state.
 The Runtime domain provides runtime information and object inspection.
 
 #### Runtime.enable
+
 Enables the runtime for the target.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Runtime.enable"
@@ -652,9 +678,11 @@ Enables the runtime for the target.
 Called during session initialization.
 
 #### Runtime.getProperties
+
 Gets properties of an object.
 
 **CDP Command:**
+
 ```json
 {
   "method": "Runtime.getProperties",
@@ -666,6 +694,7 @@ Gets properties of an object.
 ```
 
 **Response:**
+
 ```json
 {
   "result": [
@@ -698,27 +727,33 @@ All error responses follow this structure:
 ### Session Errors
 
 #### SESSION_NOT_FOUND
+
 **Description:** The specified session ID doesn't exist.
 
 **Causes:**
+
 - Invalid session ID provided
 - Session was already terminated
 - Session expired
 
 **Resolution:**
+
 - Verify the session ID is correct
 - Start a new session with `debugger_start`
 
 #### SESSION_START_FAILED
+
 **Description:** Failed to start the debug session.
 
 **Causes:**
+
 - Invalid command or arguments
 - Process failed to spawn
 - Inspector failed to attach
 - Timeout waiting for inspector
 
 **Resolution:**
+
 - Verify the command and arguments are correct
 - Check that Node.js is installed and accessible
 - Increase the timeout parameter
@@ -727,233 +762,290 @@ All error responses follow this structure:
 ### Breakpoint Errors
 
 #### BREAKPOINT_SET_FAILED
+
 **Description:** Failed to set the breakpoint.
 
 **Causes:**
+
 - Invalid file path
 - Line number out of range
 - Script not loaded yet
 - Invalid condition expression
 
 **Resolution:**
+
 - Use absolute file paths
 - Verify the line number is valid
 - Wait for the script to load before setting breakpoints
 - Check the condition expression syntax
 
 #### BREAKPOINT_NOT_FOUND
+
 **Description:** The specified breakpoint doesn't exist.
 
 **Causes:**
+
 - Invalid breakpoint ID
 - Breakpoint was already removed
 
 **Resolution:**
+
 - Use `debugger_list_breakpoints` to get valid breakpoint IDs
 - Verify the breakpoint wasn't already removed
 
 ### Execution Errors
 
 #### CONTINUE_FAILED
+
 **Description:** Failed to resume execution.
 
 **Causes:**
+
 - Session is not paused
 - Process has terminated
 - CDP command failed
 
 **Resolution:**
+
 - Ensure the session is paused before calling continue
 - Check if the process is still running
 
 #### STEP_OVER_FAILED
+
 **Description:** Failed to step over.
 
 **Causes:**
+
 - Session is not paused
 - Process has terminated
 - At the end of execution
 
 **Resolution:**
+
 - Ensure the session is paused
 - Check if there are more lines to execute
 
 #### STEP_INTO_FAILED
+
 **Description:** Failed to step into.
 
 **Causes:**
+
 - Session is not paused
 - No function call on current line
 - Process has terminated
 
 **Resolution:**
+
 - Ensure the session is paused
 - Verify there's a function call to step into
 
 #### STEP_OUT_FAILED
+
 **Description:** Failed to step out.
 
 **Causes:**
+
 - Session is not paused
 - Already at the top level
 - Process has terminated
 
 **Resolution:**
+
 - Ensure the session is paused
 - Verify you're inside a function
 
 #### PAUSE_FAILED
+
 **Description:** Failed to pause execution.
 
 **Causes:**
+
 - Session is already paused
 - Process has terminated
 - CDP command failed
 
 **Resolution:**
+
 - Check the session state before pausing
 - Verify the process is still running
 
 ### Inspection Errors
 
 #### INSPECT_FAILED
+
 **Description:** Failed to evaluate expression.
 
 **Causes:**
+
 - Session is not paused
 - Invalid expression syntax
 - Variable not in scope
 - Expression threw an error
 
 **Resolution:**
+
 - Ensure the session is paused
 - Check the expression syntax
 - Verify variables are in scope
 - Handle expression errors gracefully
 
 #### GET_STACK_FAILED
+
 **Description:** Failed to get call stack.
 
 **Causes:**
+
 - Session is not paused
 - No call frames available
 - CDP command failed
 
 **Resolution:**
+
 - Ensure the session is paused
 - Verify execution has started
 
 #### NOT_PAUSED
+
 **Description:** Operation requires the process to be paused.
 
 **Causes:**
+
 - Trying to inspect variables while running
 - Trying to step while running
 
 **Resolution:**
+
 - Set a breakpoint and continue to it
 - Use `debugger_pause` to pause execution
 
 #### GET_LOCAL_VARIABLES_FAILED
+
 **Description:** Failed to get local variables.
 
 **Causes:**
+
 - Session is not paused
 - No local scope available
 - CDP command failed
 
 **Resolution:**
+
 - Ensure the session is paused
 - Verify you're inside a function
 
 #### GET_GLOBAL_VARIABLES_FAILED
+
 **Description:** Failed to get global variables.
 
 **Causes:**
+
 - Session is not paused
 - No global scope available
 - CDP command failed
 
 **Resolution:**
+
 - Ensure the session is paused
 
 #### INSPECT_OBJECT_FAILED
+
 **Description:** Failed to inspect object.
 
 **Causes:**
+
 - Invalid object ID
 - Object no longer exists
 - CDP command failed
 
 **Resolution:**
+
 - Verify the object ID is valid
 - Re-evaluate the expression to get a fresh object ID
 
 ### Watch Errors
 
 #### ADD_WATCH_FAILED
+
 **Description:** Failed to add watched variable.
 
 **Causes:**
+
 - Invalid expression
 - Internal error
 
 **Resolution:**
+
 - Check the expression syntax
 
 #### REMOVE_WATCH_FAILED
+
 **Description:** Failed to remove watched variable.
 
 **Causes:**
+
 - Internal error
 
 **Resolution:**
+
 - Retry the operation
 
 #### WATCH_NOT_FOUND
+
 **Description:** The specified watch doesn't exist.
 
 **Causes:**
+
 - Invalid watch ID
 - Watch was already removed
 
 **Resolution:**
+
 - Use `debugger_get_watches` to get valid watch IDs
 
 #### GET_WATCHES_FAILED
+
 **Description:** Failed to get watched variables.
 
 **Causes:**
+
 - Internal error
 
 **Resolution:**
+
 - Retry the operation
 
 ### Frame Errors
 
 #### SWITCH_FRAME_FAILED
+
 **Description:** Failed to switch stack frame.
 
 **Causes:**
+
 - Invalid frame index
 - Session is not paused
 - No call frames available
 
 **Resolution:**
+
 - Use `debugger_get_stack` to get valid frame indices
 - Ensure the session is paused
 
 ### Hang Detection Errors
 
 #### HANG_DETECTION_FAILED
+
 **Description:** Failed to detect hang.
 
 **Causes:**
+
 - Failed to start process
 - Inspector failed to attach
 - Internal error
 
 **Resolution:**
+
 - Verify the command and arguments
 - Check process stderr for errors
 - Retry with different parameters
@@ -961,45 +1053,57 @@ All error responses follow this structure:
 ### Cleanup Errors
 
 #### STOP_SESSION_FAILED
+
 **Description:** Failed to stop the session.
 
 **Causes:**
+
 - Session already stopped
 - Internal error during cleanup
 
 **Resolution:**
+
 - The session may already be terminated
 - Check if resources were released
 
 #### REMOVE_BREAKPOINT_FAILED
+
 **Description:** Failed to remove breakpoint.
 
 **Causes:**
+
 - CDP command failed
 - Breakpoint already removed
 
 **Resolution:**
+
 - Verify the breakpoint exists
 - Retry the operation
 
 #### TOGGLE_BREAKPOINT_FAILED
+
 **Description:** Failed to toggle breakpoint.
 
 **Causes:**
+
 - CDP command failed
 - Breakpoint doesn't exist
 
 **Resolution:**
+
 - Verify the breakpoint exists
 - Use `debugger_list_breakpoints` to check status
 
 #### LIST_BREAKPOINTS_FAILED
+
 **Description:** Failed to list breakpoints.
 
 **Causes:**
+
 - Internal error
 
 **Resolution:**
+
 - Retry the operation
 
 ## Type Definitions

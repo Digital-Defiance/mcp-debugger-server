@@ -1,4 +1,4 @@
-# MCP Debugger Server
+# MCP ACS Debugger Server
 
 [![NPM Version](https://img.shields.io/npm/v/@ai-capabilities-suite/mcp-debugger-server)](https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server)
 [![GitHub Release](https://img.shields.io/github/v/release/digital-defiance/mcp-debugger-server?label=Release&logo=github)](https://github.com/digital-defiance/mcp-debugger-server/releases)
@@ -181,7 +181,7 @@ MCP_DEBUGGER_AUDIT_LOG=true
 
 ## 🛠️ Available Tools
 
-The MCP Debugger Server provides **25 specialized tools** organized into 8 categories:
+The MCP ACS Debugger Server provides **25 specialized tools** organized into 8 categories:
 
 ### Session Management
 
@@ -534,7 +534,7 @@ Ask your AI agent to debug your code:
 "Debug my Node.js script app.js and set a breakpoint at line 42"
 ```
 
-The AI agent will use the MCP Debugger Server to:
+The AI agent will use the MCP ACS Debugger Server to:
 
 1. Start a debug session
 2. Set the breakpoint
@@ -769,12 +769,15 @@ _Debugging TypeScript code with source map support_
 **Solution**:
 
 1. Verify the file path is correct (use absolute paths):
+
    ```javascript
    "file": "/absolute/path/to/your/file.js"  // ✅ Good
    "file": "file.js"                          // ❌ Avoid
    ```
+
 2. Check that the line number has executable code (not comments or blank lines)
 3. Verify the breakpoint is set and verified:
+
    ```javascript
    {
      "tool": "debugger_list_breakpoints",
@@ -807,6 +810,7 @@ _Debugging TypeScript code with source map support_
 **Solution**:
 
 1. Ensure `"sourceMap": true` in tsconfig.json:
+
    ```json
    {
      "compilerOptions": {
@@ -814,11 +818,15 @@ _Debugging TypeScript code with source map support_
      }
    }
    ```
+
 2. Use `--enable-source-maps` flag when starting Node.js:
+
    ```bash
    node --enable-source-maps dist/app.js
    ```
+
 3. Verify .map files exist alongside compiled JavaScript:
+
    ```bash
    ls dist/*.js.map
    ```
@@ -848,11 +856,14 @@ npm install -g @ai-capabilities-suite/mcp-debugger-server
 **Solution**:
 
 1. Ensure Node.js version is 18 or higher:
+
    ```bash
    node --version  # Should be >= 18.0.0
    ```
+
 2. Check that no other debugger is attached to the process
 3. Verify the process starts successfully:
+
    ```bash
    node --inspect-brk your-script.js
    # Should output: Debugger listening on ws://...
@@ -866,12 +877,14 @@ npm install -g @ai-capabilities-suite/mcp-debugger-server
 
 1. Limit concurrent sessions
 2. Stop unused sessions:
+
    ```javascript
    {
      "tool": "debugger_stop_session",
      "arguments": { "sessionId": "session-id" }
    }
    ```
+
 3. Configure resource limits (see Environment Variables section)
 
 #### Issue: Slow performance
@@ -881,6 +894,7 @@ npm install -g @ai-capabilities-suite/mcp-debugger-server
 **Solution**:
 
 1. Limit object inspection depth:
+
    ```javascript
    {
      "tool": "debugger_inspect_object",
@@ -891,6 +905,7 @@ npm install -g @ai-capabilities-suite/mcp-debugger-server
      }
    }
    ```
+
 2. Use conditional breakpoints to reduce pauses
 3. Remove unnecessary breakpoints
 
@@ -905,7 +920,7 @@ If you encounter issues not covered here:
    - Server version (`ts-mcp-server --version`)
    - Error messages and stack traces
    - Steps to reproduce
-4. **Email support**: info@digitaldefiance.org
+4. **Email support**: <info@digitaldefiance.org>
 
 ## 💡 Use Cases
 
@@ -952,7 +967,7 @@ Identify and fix performance issues:
 
 ## 📊 Feature Comparison
 
-| Feature                    | MCP Debugger Server                             | VS Code Debugger | Chrome DevTools | Node Inspector |
+| Feature                    | MCP ACS Debugger Server                             | VS Code Debugger | Chrome DevTools | Node Inspector |
 | -------------------------- | ----------------------------------------------- | ---------------- | --------------- | -------------- |
 | AI Agent Integration       | ✅ Full MCP Support                             | ❌ No            | ❌ No           | ❌ No          |
 | Breakpoints                | ✅ Advanced (conditional, hit count, logpoints) | ✅ Yes           | ✅ Yes          | ✅ Basic       |
@@ -1018,7 +1033,7 @@ See [TESTING.md](./TESTING.md) for comprehensive testing documentation.
 
 ### Technology Stack
 
-The MCP Debugger Server is built on enterprise-grade technologies:
+The MCP ACS Debugger Server is built on enterprise-grade technologies:
 
 - **MCP SDK**: Model Context Protocol implementation for AI agent communication
 - **Chrome DevTools Protocol (CDP)**: Node.js Inspector Protocol for low-level debugging
@@ -1037,7 +1052,7 @@ The MCP Debugger Server is built on enterprise-grade technologies:
                          │ MCP Protocol (stdio/JSON-RPC)
                          │
 ┌────────────────────────▼────────────────────────────────────┐
-│                   MCP Debugger Server                        │
+│                   MCP ACS Debugger Server                        │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
 │  │   Session    │  │  Breakpoint  │  │   Variable   │     │
 │  │   Manager    │  │   Manager    │  │  Inspector   │     │
@@ -1200,13 +1215,13 @@ SOFTWARE.
 
 ## 🔗 Links
 
-- **Homepage**: https://digitaldefiance.org
-- **GitHub**: https://github.com/digital-defiance/ai-capabilities-suite
-- **NPM**: https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server
-- **Docker Hub**: https://hub.docker.com/r/digitaldefiance/mcp-debugger-server
-- **Documentation**: https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server
-- **Issues**: https://github.com/digital-defiance/ai-capabilities-suite/issues
-- **Discussions**: https://github.com/digital-defiance/ai-capabilities-suite/discussions
+- **Homepage**: <https://digitaldefiance.org>
+- **GitHub**: <https://github.com/digital-defiance/ai-capabilities-suite>
+- **NPM**: <https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server>
+- **Docker Hub**: <https://hub.docker.com/r/digitaldefiance/mcp-debugger-server>
+- **Documentation**: <https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server>
+- **Issues**: <https://github.com/digital-defiance/ai-capabilities-suite/issues>
+- **Discussions**: <https://github.com/digital-defiance/ai-capabilities-suite/discussions>
 
 ---
 
@@ -1227,7 +1242,7 @@ SOFTWARE.
 ### General Questions
 
 **Q: What is the Model Context Protocol (MCP)?**
-A: MCP is a protocol that enables AI agents to interact with external tools and services. The MCP Debugger Server implements MCP to provide debugging capabilities to AI agents.
+A: MCP is a protocol that enables AI agents to interact with external tools and services. The MCP ACS Debugger Server implements MCP to provide debugging capabilities to AI agents.
 
 **Q: Which AI agents are supported?**
 A: The server works with any MCP-compatible AI agent, including:
@@ -1242,7 +1257,7 @@ A: The server works with any MCP-compatible AI agent, including:
 A: Yes! The server includes enterprise features like authentication, rate limiting, audit logging, and circuit breakers specifically for production use. However, always test in a staging environment first.
 
 **Q: Is this free to use?**
-A: Yes, the MCP Debugger Server is open source under the MIT license and free for both personal and commercial use.
+A: Yes, the MCP ACS Debugger Server is open source under the MIT license and free for both personal and commercial use.
 
 ### Technical Questions
 
@@ -1335,7 +1350,7 @@ A: Yes! The server has built-in support for all major test frameworks. Just star
 - **📖 Documentation**: [Full documentation](https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server)
 - **🐛 Bug Reports**: [GitHub Issues](https://github.com/digital-defiance/ai-capabilities-suite/issues)
 - **💡 Feature Requests**: [GitHub Discussions](https://github.com/digital-defiance/ai-capabilities-suite/discussions)
-- **📧 Email Support**: info@digitaldefiance.org
+- **📧 Email Support**: <info@digitaldefiance.org>
 - **💬 Community Chat**: [Join our Discord](https://discord.gg/digitaldefiance) _(coming soon)_
 
 ### Resources

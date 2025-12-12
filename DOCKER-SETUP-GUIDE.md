@@ -1,6 +1,6 @@
 # Docker Hub Setup Guide
 
-This guide walks you through the manual steps required to set up Docker Hub publishing for the MCP Debugger Server.
+This guide walks you through the manual steps required to set up Docker Hub publishing for the MCP ACS Debugger Server.
 
 ## Prerequisites
 
@@ -58,7 +58,7 @@ Your repository will be available at: `digitaldefiance/mcp-debugger-server`
 ### Optional: SNYK_TOKEN (for security scanning)
 
 - **Name:** `SNYK_TOKEN`
-- **Value:** Your Snyk API token (get from https://snyk.io/)
+- **Value:** Your Snyk API token (get from <https://snyk.io/>)
 
 ## Step 5: Test Local Docker Build
 
@@ -273,9 +273,9 @@ docker image prune -a
 
 For issues with Docker Hub setup:
 
-- Docker Hub Support: https://hub.docker.com/support/
-- GitHub Issues: https://github.com/digital-defiance/ai-capabilities-suite/issues
-- Email: info@digitaldefiance.org
+- Docker Hub Support: <https://hub.docker.com/support/>
+- GitHub Issues: <https://github.com/digital-defiance/ai-capabilities-suite/issues>
+- Email: <info@digitaldefiance.org>
 
 ## Next Steps
 

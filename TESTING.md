@@ -1,6 +1,6 @@
-# MCP Debugger Server - E2E Testing Guide
+# MCP ACS Debugger Server - E2E Testing Guide
 
-This document provides comprehensive instructions for running and troubleshooting E2E tests for the MCP Debugger Server.
+This document provides comprehensive instructions for running and troubleshooting E2E tests for the MCP ACS Debugger Server.
 
 ## Table of Contents
 
@@ -90,6 +90,7 @@ node packages/mcp-server/test-mcp-manual.js
 ```
 
 The manual testing script provides:
+
 - ✓ Green checkmarks for passing tests
 - ✗ Red X marks for failing tests
 - ℹ Blue info messages
@@ -100,6 +101,7 @@ The manual testing script provides:
 ### Manual Test Coverage
 
 The manual script tests:
+
 1. Protocol initialization
 2. Tool discovery
 3. Hang detection (infinite loop)
@@ -120,11 +122,13 @@ npm install -g @modelcontextprotocol/inspector
 ### Usage
 
 1. **Start the MCP server**:
+
    ```bash
    node packages/mcp-server/dist/src/index.js
    ```
 
 2. **In another terminal, use the inspector**:
+
    ```bash
    mcp-inspector
    ```
@@ -184,6 +188,7 @@ npm install -g @modelcontextprotocol/inspector
 **Problem**: Tests fail with "Cannot find module" errors
 
 **Solution**:
+
 ```bash
 # Clean and rebuild
 rm -rf packages/*/dist
@@ -196,6 +201,7 @@ npx nx build @ai-capabilities-suite/mcp-server
 **Problem**: Tests timeout with "Request timeout for X" errors
 
 **Solution**:
+
 - Increase test timeout: `--testTimeout=60000`
 - Check if the server is starting correctly
 - Look for stderr output in test logs
@@ -205,6 +211,7 @@ npx nx build @ai-capabilities-suite/mcp-server
 **Problem**: "ws_1.default is not a constructor" or similar WebSocket errors
 
 **Solution**:
+
 - Ensure you're using CommonJS module format
 - Check that `ws` package is properly installed
 - Verify tsconfig.json has `"module": "CommonJS"`
@@ -214,6 +221,7 @@ npx nx build @ai-capabilities-suite/mcp-server
 **Problem**: Normal completion scripts are detected as hung
 
 **Solution**:
+
 - Increase the timeout parameter in hang detection calls
 - The default 2000ms may be too short for some scripts
 - Use 5000ms or higher for scripts with I/O operations
@@ -223,6 +231,7 @@ npx nx build @ai-capabilities-suite/mcp-server
 **Problem**: "Cannot step over in state: running" or "Process must be paused"
 
 **Solution**:
+
 - Ensure the process is paused before calling step/inspect operations
 - Set breakpoints and continue to them before stepping
 - Wait for breakpoint events after calling continue
@@ -245,6 +254,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":
 ```
 
 Expected output:
+
 ```json
 {"result":{"protocolVersion":"2024-11-05","capabilities":{"tools":{"listChanged":true}},"serverInfo":{"name":"debugger-server","version":"1.0.0"}},"jsonrpc":"2.0","id":1}
 ```
@@ -258,6 +268,7 @@ ls -la packages/debugger-core/test-fixtures/
 ```
 
 Required fixtures:
+
 - `infinite-loop.js` - For hang detection tests
 - `normal-completion.js` - For normal completion tests
 - `simple-script.js` - For basic debugging tests

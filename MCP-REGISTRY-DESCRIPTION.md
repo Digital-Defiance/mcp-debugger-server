@@ -1,8 +1,8 @@
-# MCP Debugger Server - Registry Description
+# MCP ACS Debugger Server - Registry Description
 
 ## Overview
 
-The **MCP Debugger Server** is an enterprise-grade Model Context Protocol (MCP) server that provides comprehensive debugging capabilities for Node.js and TypeScript applications. It enables AI agents to interactively debug code through 25+ specialized tools, offering everything from basic breakpoint management to advanced CPU/memory profiling and hang detection.
+The **MCP ACS Debugger Server** is an enterprise-grade Model Context Protocol (MCP) server that provides comprehensive debugging capabilities for Node.js and TypeScript applications. It enables AI agents to interactively debug code through 25+ specialized tools, offering everything from basic breakpoint management to advanced CPU/memory profiling and hang detection.
 
 ## Key Features
 
@@ -166,10 +166,10 @@ Add to your MCP configuration file (`.kiro/settings/mcp.json`):
 
 ## Support & Community
 
-- **GitHub Repository**: https://github.com/digital-defiance/ai-capabilities-suite
-- **Issues**: https://github.com/digital-defiance/ai-capabilities-suite/issues
-- **NPM Package**: https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server
-- **Email**: info@digitaldefiance.org
+- **GitHub Repository**: <https://github.com/digital-defiance/ai-capabilities-suite>
+- **Issues**: <https://github.com/digital-defiance/ai-capabilities-suite/issues>
+- **NPM Package**: <https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server>
+- **Email**: <info@digitaldefiance.org>
 
 ## License
 
@@ -179,9 +179,9 @@ MIT License - See LICENSE file for details
 
 **Digital Defiance**
 
-- Website: https://digitaldefiance.org
-- Email: info@digitaldefiance.org
-- GitHub: https://github.com/digital-defiance
+- Website: <https://digitaldefiance.org>
+- Email: <info@digitaldefiance.org>
+- GitHub: <https://github.com/digital-defiance>
 
 ## Version
 

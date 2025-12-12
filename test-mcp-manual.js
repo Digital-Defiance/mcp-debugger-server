@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Manual Testing Script for MCP Debugger Server
+ * Manual Testing Script for MCP ACS Debugger Server
  *
  * This script provides an interactive way to test the MCP debugger server
  * with colored output and clear pass/fail indicators.
@@ -63,7 +63,7 @@ class MCPTester {
   }
 
   async start() {
-    logSection("MCP Debugger Server - Manual Test Suite");
+    logSection("MCP ACS Debugger Server - Manual Test Suite");
 
     try {
       await this.startServer();

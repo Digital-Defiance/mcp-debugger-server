@@ -1,6 +1,6 @@
 # NPM Publishing Guide
 
-This guide covers the complete process for publishing the MCP Debugger Server packages to NPM, including setup, manual publishing, and automated workflows.
+This guide covers the complete process for publishing the MCP ACS Debugger Server packages to NPM, including setup, manual publishing, and automated workflows.
 
 ## Table of Contents
 
@@ -28,12 +28,14 @@ Before publishing to NPM, ensure you have:
 ### 1. NPM Account Configuration
 
 #### Create NPM Account
+
 ```bash
 # If you don't have an account, create one
 npm adduser
 ```
 
 #### Login to NPM
+
 ```bash
 # Login to your NPM account
 npm login
@@ -43,6 +45,7 @@ npm whoami
 ```
 
 #### Enable Two-Factor Authentication
+
 1. Go to [npmjs.com/settings/profile](https://www.npmjs.com/settings/profile)
 2. Navigate to "Two-Factor Authentication"
 3. Enable 2FA for "Authorization and Publishing"
@@ -100,6 +103,7 @@ Check that `package.json` is properly configured:
 ### Pre-Publishing Steps
 
 1. **Update Version Number**
+
    ```bash
    # Update version in package.json
    cd packages/mcp-debugger-server
@@ -107,6 +111,7 @@ Check that `package.json` is properly configured:
    ```
 
 2. **Clean and Build**
+
    ```bash
    # From repository root
    yarn clean
@@ -115,6 +120,7 @@ Check that `package.json` is properly configured:
    ```
 
 3. **Run Tests**
+
    ```bash
    # Run full test suite
    yarn test
@@ -124,6 +130,7 @@ Check that `package.json` is properly configured:
    ```
 
 4. **Verify Package Contents**
+
    ```bash
    # Dry run to see what will be published
    cd packages/mcp-debugger-server
@@ -138,7 +145,7 @@ Check that `package.json` is properly configured:
 
 #### Important: Publishing Order
 
-The MCP Debugger consists of two packages that must be published in order:
+The MCP ACS Debugger consists of two packages that must be published in order:
 
 1. **mcp-debugger-core** - Core debugging engine (dependency)
 2. **mcp-debugger-server** - MCP server (depends on core)
@@ -363,6 +370,7 @@ Use this checklist before each publish:
 #### Issue: "You must be logged in to publish packages"
 
 **Solution:**
+
 ```bash
 npm login
 npm whoami  # Verify login
@@ -371,11 +379,13 @@ npm whoami  # Verify login
 #### Issue: "You do not have permission to publish"
 
 **Causes:**
+
 - Not a member of the `@ai-capabilities-suite` organization
 - Package name already taken
 - 2FA not configured
 
 **Solutions:**
+
 ```bash
 # Check organization membership
 npm org ls @ai-capabilities-suite
@@ -387,6 +397,7 @@ npm org ls @ai-capabilities-suite
 #### Issue: "Version already exists"
 
 **Solution:**
+
 ```bash
 # Increment version
 npm version patch
@@ -397,11 +408,13 @@ npm version patch
 #### Issue: "npm ERR! 403 Forbidden"
 
 **Causes:**
+
 - Invalid NPM token
 - Token expired
 - Insufficient permissions
 
 **Solutions:**
+
 1. Generate new NPM token
 2. Update GitHub secret `NPM_TOKEN`
 3. Verify token has publish permissions
@@ -409,6 +422,7 @@ npm version patch
 #### Issue: "Package size too large"
 
 **Solution:**
+
 ```bash
 # Check what's being included
 npm pack --dry-run
@@ -422,6 +436,7 @@ echo "coverage/" >> .npmignore
 #### Issue: "Build fails in CI"
 
 **Solutions:**
+
 1. Run build locally: `yarn build`
 2. Check Node.js version matches CI (18+)
 3. Verify all dependencies installed
@@ -472,6 +487,7 @@ node -e "const mcp = require('@ai-capabilities-suite/mcp-debugger-server'); cons
 After publishing:
 
 1. **Update README badges** (if using shields.io):
+
    ```markdown
    ![npm version](https://img.shields.io/npm/v/@ai-capabilities-suite/mcp-debugger-server)
    ![npm downloads](https://img.shields.io/npm/dm/@ai-capabilities-suite/mcp-debugger-server)
@@ -496,9 +512,10 @@ After publishing:
 After publishing, monitor:
 
 1. **NPM Package Page**: Check for issues
-   - https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server
+   - <https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server>
 
 2. **Download Stats**: Track adoption
+
    ```bash
    npm info @ai-capabilities-suite/mcp-debugger-server
    ```
@@ -506,6 +523,7 @@ After publishing, monitor:
 3. **GitHub Issues**: Watch for bug reports
 
 4. **Security Alerts**: Monitor for vulnerabilities
+
    ```bash
    npm audit
    ```

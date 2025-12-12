@@ -1,6 +1,6 @@
 {
   "name": "@ai-capabilities-suite/mcp-debugger-server",
-  "version": "1.5.21",
+  "version": "1.5.22",
   "packageManager": "yarn@4.12.0",
   "mcpName": "io.github.Digital-Defiance/mcp-debugger",
   "homepage": "https://github.com/Digital-Defiance/mcp-debugger-server",
@@ -187,7 +187,7 @@
     }
   },
   "dependencies": {
-    "@ai-capabilities-suite/mcp-debugger-core": "^1.0.15",
+    "@ai-capabilities-suite/mcp-debugger-core": "^1.0.16",
     "@modelcontextprotocol/sdk": "^1.23.0",
     "tslib": "^2.3.0",
     "zod": "^4.1.13"

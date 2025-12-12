@@ -2,42 +2,45 @@ import { spawn, ChildProcess } from "child_process";
 import * as path from "path";
 import * as fs from "fs";
 
-// Test fixtures are in mcp-debugger-core package  
+// Test fixtures are in mcp-debugger-core package
 // From src/lib (when running tests), go up to src, then package root, then workspace root, then to mcp-debugger-core
 // Find test fixtures directory - works in monorepo, standalone repo, and CI
 const findTestFixturesDir = (startDir: string): string => {
   let currentDir = startDir;
-  
+
   // Try local test-fixtures first (standalone repo)
   while (currentDir !== path.dirname(currentDir)) {
-    const localPath = path.join(currentDir, 'test-fixtures');
+    const localPath = path.join(currentDir, "test-fixtures");
     if (fs.existsSync(localPath)) {
       return localPath;
     }
     currentDir = path.dirname(currentDir);
   }
-  
+
   // Try monorepo structure (packages/mcp-debugger-core/test-fixtures)
   currentDir = startDir;
   while (currentDir !== path.dirname(currentDir)) {
-    const monorepoPath = path.join(currentDir, 'packages/mcp-debugger-core/test-fixtures');
+    const monorepoPath = path.join(
+      currentDir,
+      "packages/mcp-debugger-core/test-fixtures"
+    );
     if (fs.existsSync(monorepoPath)) {
       return monorepoPath;
     }
     currentDir = path.dirname(currentDir);
   }
-  
+
   throw new Error(`Test fixtures not found. Searched from: ${startDir}`);
 };
 
 const TEST_FIXTURES_DIR = findTestFixturesDir(__dirname);
-console.log('[E2E Test] Using test fixtures from:', TEST_FIXTURES_DIR)
+console.log("[E2E Test] Using test fixtures from:", TEST_FIXTURES_DIR);
 
 /**
- * End-to-End tests for MCP Debugger Server
+ * End-to-End tests for MCP ACS Debugger Server
  * Tests the actual MCP protocol communication via stdio
  */
-describe("MCP Debugger Server - E2E", () => {
+describe("MCP ACS Debugger Server - E2E", () => {
   let serverProcess: ChildProcess;
   let messageId = 0;
 
@@ -297,8 +300,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should detect a hanging process", async () => {
-      const testFile = path.join(TEST_FIXTURES_DIR, "infinite-loop.js"
-      );
+      const testFile = path.join(TEST_FIXTURES_DIR, "infinite-loop.js");
 
       const result = await sendRequest(
         "tools/call",
@@ -331,8 +333,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should detect normal completion", async () => {
-      const testFile = path.join(TEST_FIXTURES_DIR, "slow-completion.js"
-      );
+      const testFile = path.join(TEST_FIXTURES_DIR, "slow-completion.js");
 
       const result = await sendRequest(
         "tools/call",
@@ -364,8 +365,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should start a debug session", async () => {
-      const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js"
-      );
+      const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js");
 
       const result = await sendRequest("tools/call", {
         name: "debugger_start",
@@ -392,7 +392,10 @@ describe("MCP Debugger Server - E2E", () => {
   });
 
   // Helper function to wait for process to be paused
-  async function waitForPausedState(sessionId: string, maxAttempts = 10): Promise<boolean> {
+  async function waitForPausedState(
+    sessionId: string,
+    maxAttempts = 10
+  ): Promise<boolean> {
     for (let i = 0; i < maxAttempts; i++) {
       try {
         const result = await sendRequest("tools/call", {
@@ -405,20 +408,27 @@ describe("MCP Debugger Server - E2E", () => {
           console.log(`[Test] Process paused after ${i + 1} attempts`);
           return true;
         }
-        console.log(`[Test] Attempt ${i + 1}/${maxAttempts}: Not paused yet (${response.code || response.message})`);
+        console.log(
+          `[Test] Attempt ${i + 1}/${maxAttempts}: Not paused yet (${
+            response.code || response.message
+          })`
+        );
       } catch (e) {
-        console.log(`[Test] Attempt ${i + 1}/${maxAttempts}: Error - ${e.message}`);
+        console.log(
+          `[Test] Attempt ${i + 1}/${maxAttempts}: Error - ${e.message}`
+        );
       }
       await new Promise((resolve) => setTimeout(resolve, 200));
     }
-    console.log(`[Test] Failed to detect paused state after ${maxAttempts} attempts`);
+    console.log(
+      `[Test] Failed to detect paused state after ${maxAttempts} attempts`
+    );
     return false;
   }
 
   describe("Tool Execution - Session Operations", () => {
     let sessionId: string;
-    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js"
-    );
+    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js");
 
     beforeAll(async () => {
       // Restart server for this test suite
@@ -450,7 +460,9 @@ describe("MCP Debugger Server - E2E", () => {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const paused = await waitForPausedState(sessionId, 15);
       if (!paused) {
-        throw new Error('Process did not pause at debugger statement within timeout');
+        throw new Error(
+          "Process did not pause at debugger statement within timeout"
+        );
       }
     }, 60000);
 
@@ -581,8 +593,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Step Operations - Requirements 2.4, 2.5, 2.6", () => {
     let sessionId: string;
-    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js"
-    );
+    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js");
 
     beforeAll(async () => {
       // Restart server for this test suite
@@ -765,8 +776,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Breakpoint Management - Requirements 1.2, 1.3, 1.4, 1.5", () => {
     let sessionId: string;
-    const testFile = path.join(TEST_FIXTURES_DIR, "conditional-test.js"
-    );
+    const testFile = path.join(TEST_FIXTURES_DIR, "conditional-test.js");
 
     beforeAll(async () => {
       // Restart server for this test suite
@@ -1017,8 +1027,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Variable Inspection - Requirements 3.1, 3.2, 3.3, 9.3", () => {
     let sessionId: string;
-    const testFile = path.join(TEST_FIXTURES_DIR, "expression-test.js"
-    );
+    const testFile = path.join(TEST_FIXTURES_DIR, "expression-test.js");
 
     beforeAll(async () => {
       // Restart server for this test suite
@@ -1192,8 +1201,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Variable Watching - Requirements 3.5", () => {
     let sessionId: string;
-    const testFile = path.join(TEST_FIXTURES_DIR, "watch-test.js"
-    );
+    const testFile = path.join(TEST_FIXTURES_DIR, "watch-test.js");
 
     beforeAll(async () => {
       // Restart server for this test suite
@@ -1359,8 +1367,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Stack Frame Navigation - Requirements 4.2, 4.3", () => {
     let sessionId: string;
-    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js"
-    );
+    const testFile = path.join(TEST_FIXTURES_DIR, "step-test.js");
 
     beforeAll(async () => {
       // Restart server for this test suite
@@ -1578,8 +1585,7 @@ describe("MCP Debugger Server - E2E", () => {
   });
 
   describe("Session Management - Requirements 8.2, 8.5", () => {
-    const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js"
-    );
+    const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js");
 
     it("should stop a debug session", async () => {
       // Start a session
@@ -1761,8 +1767,7 @@ describe("MCP Debugger Server - E2E", () => {
   });
 
   describe("Crash Detection - Requirements 8.1", () => {
-    const testFile = path.join(TEST_FIXTURES_DIR, "crash-test-simple.js"
-    );
+    const testFile = path.join(TEST_FIXTURES_DIR, "crash-test-simple.js");
 
     it("should detect process crash", async () => {
       // Start a session with a script that will crash
@@ -1883,8 +1888,7 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Test Framework Integration - Requirements 6.1, 6.2, 6.3, 6.4, 6.5", () => {
     it("should run Jest tests with debugger attached", async () => {
-      const testFile = path.join(TEST_FIXTURES_DIR, "jest-sample.test.js"
-      );
+      const testFile = path.join(TEST_FIXTURES_DIR, "jest-sample.test.js");
 
       // Note: This would require a debugger_run_tests tool or similar
       // For now, we can test starting a debug session with jest
@@ -1917,8 +1921,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should run Mocha tests with debugger attached", async () => {
-      const testFile = path.join(TEST_FIXTURES_DIR, "mocha-sample.test.js"
-      );
+      const testFile = path.join(TEST_FIXTURES_DIR, "mocha-sample.test.js");
 
       const result = await sendRequest("tools/call", {
         name: "debugger_start",
@@ -1948,8 +1951,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should run Vitest tests with debugger attached", async () => {
-      const testFile = path.join(TEST_FIXTURES_DIR, "vitest-sample.test.js"
-      );
+      const testFile = path.join(TEST_FIXTURES_DIR, "vitest-sample.test.js");
 
       const result = await sendRequest("tools/call", {
         name: "debugger_start",
@@ -1979,8 +1981,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should capture test output from stdout and stderr", async () => {
-      const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js"
-      );
+      const testFile = path.join(TEST_FIXTURES_DIR, "simple-script.js");
 
       // Start a session that will produce output
       const startResult = await sendRequest("tools/call", {
@@ -2021,8 +2022,7 @@ describe("MCP Debugger Server - E2E", () => {
     }, 60000);
 
     it("should provide test failure information", async () => {
-      const testFile = path.join(TEST_FIXTURES_DIR, "crash-test-simple.js"
-      );
+      const testFile = path.join(TEST_FIXTURES_DIR, "crash-test-simple.js");
 
       // Start a session with a script that will fail
       const startResult = await sendRequest("tools/call", {
@@ -2072,10 +2072,8 @@ describe("MCP Debugger Server - E2E", () => {
 
   describe("Source Map Support - Requirements 7.1, 7.2, 7.3, 7.4", () => {
     let sessionId: string;
-    const tsFile = path.join(TEST_FIXTURES_DIR, "typescript-sample.ts"
-    );
-    const jsFile = path.join(TEST_FIXTURES_DIR, "typescript-sample.js"
-    );
+    const tsFile = path.join(TEST_FIXTURES_DIR, "typescript-sample.ts");
+    const jsFile = path.join(TEST_FIXTURES_DIR, "typescript-sample.js");
 
     beforeAll(async () => {
       // Check if compiled JS file exists

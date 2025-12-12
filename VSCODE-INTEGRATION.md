@@ -1,6 +1,6 @@
 # VS Code Extension Integration Guide
 
-This guide provides instructions for integrating the MCP Debugger Server with VS Code and GitHub Copilot.
+This guide provides instructions for integrating the MCP ACS Debugger Server with VS Code and GitHub Copilot.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ This guide provides instructions for integrating the MCP Debugger Server with VS
 
 ## Overview
 
-The MCP Debugger Server can be integrated with VS Code in two ways:
+The MCP ACS Debugger Server can be integrated with VS Code in two ways:
 
 1. **Direct MCP Integration**: Use VS Code's MCP support (if available)
 2. **Custom Extension**: Create a VS Code extension that wraps the MCP server
@@ -26,7 +26,7 @@ This guide covers both approaches and provides examples for common project types
 
 - VS Code 1.80 or higher
 - Node.js 16 or higher
-- MCP Debugger Server built and ready
+- MCP ACS Debugger Server built and ready
 
 ### Option 1: Direct MCP Integration
 
@@ -48,14 +48,14 @@ yo code
 
 # Select "New Extension (TypeScript)"
 # Name: mcp-debugger-vscode
-# Description: MCP Debugger integration for VS Code
+# Description: MCP ACS Debugger integration for VS Code
 ```
 
 ## Configuration
 
 ### VS Code Settings
 
-Add the MCP Debugger Server to your VS Code settings (`.vscode/settings.json`):
+Add the MCP ACS Debugger Server to your VS Code settings (`.vscode/settings.json`):
 
 ```json
 {
@@ -97,7 +97,7 @@ For multi-root workspaces, configure in the workspace file:
 
 1. Open a JavaScript or TypeScript file
 2. Open the Command Palette (Ctrl+Shift+P / Cmd+Shift+P)
-3. Run: "MCP Debugger: Debug Current File"
+3. Run: "MCP ACS Debugger: Debug Current File"
 4. The debugger starts and pauses at the first line
 
 **VS Code Extension Command:**
@@ -128,7 +128,7 @@ vscode.commands.registerCommand('mcp-debugger.debugCurrentFile', async () => {
 
 1. Set breakpoints in your code (click in the gutter)
 2. Open Command Palette
-3. Run: "MCP Debugger: Start Debugging"
+3. Run: "MCP ACS Debugger: Start Debugging"
 4. The debugger starts and stops at your breakpoints
 
 **VS Code Extension Command:**
@@ -171,7 +171,7 @@ vscode.commands.registerCommand('mcp-debugger.startDebugging', async () => {
 
 1. Open a test file
 2. Open Command Palette
-3. Run: "MCP Debugger: Debug Test File"
+3. Run: "MCP ACS Debugger: Debug Test File"
 4. Select test framework (Jest/Mocha/Vitest)
 5. The debugger runs your tests with debugging enabled
 
@@ -308,7 +308,7 @@ vscode.commands.registerCommand('mcp-debugger.continue', async () => {
 
 ### Overview
 
-GitHub Copilot can use the MCP Debugger Server to assist with debugging tasks.
+GitHub Copilot can use the MCP ACS Debugger Server to assist with debugging tasks.
 
 ### Configuration
 
@@ -332,6 +332,7 @@ Enable Copilot to access the MCP server:
 **User:** "Debug this function and tell me why it's not working"
 
 **Copilot:**
+
 ```
 I'll debug the function for you.
 
@@ -349,6 +350,7 @@ You need to initialize it before this point.
 **User:** "Find the bug in this code"
 
 **Copilot:**
+
 ```
 I'll analyze the code with the debugger.
 
@@ -365,6 +367,7 @@ not 'i <= array.length'. This causes an array index out of bounds error.
 **User:** "Explain how this function executes"
 
 **Copilot:**
+
 ```
 I'll step through the function and explain each step.
 
@@ -423,6 +426,7 @@ In agent mode, Copilot can autonomously use debugging tools:
 ### Example 1: Node.js Application
 
 **Project Structure:**
+
 ```
 my-app/
 ├── src/
@@ -434,6 +438,7 @@ my-app/
 ```
 
 **VS Code Settings:**
+
 ```json
 {
   "mcp.servers": {
@@ -450,6 +455,7 @@ my-app/
 ### Example 2: TypeScript Application
 
 **Project Structure:**
+
 ```
 my-ts-app/
 ├── src/
@@ -464,6 +470,7 @@ my-ts-app/
 ```
 
 **VS Code Settings:**
+
 ```json
 {
   "mcp.servers": {
@@ -482,6 +489,7 @@ my-ts-app/
 ```
 
 **tsconfig.json:**
+
 ```json
 {
   "compilerOptions": {
@@ -494,6 +502,7 @@ my-ts-app/
 ### Example 3: Jest Tests
 
 **Project Structure:**
+
 ```
 my-app/
 ├── src/
@@ -506,6 +515,7 @@ my-app/
 ```
 
 **VS Code Settings:**
+
 ```json
 {
   "mcp.servers": {
@@ -528,6 +538,7 @@ my-app/
 ### Example 4: Monorepo
 
 **Project Structure:**
+
 ```
 monorepo/
 ├── packages/
@@ -541,6 +552,7 @@ monorepo/
 ```
 
 **VS Code Settings:**
+
 ```json
 {
   "mcp.servers": {
@@ -557,6 +569,7 @@ monorepo/
 ### Example 5: Docker Development
 
 **Project Structure:**
+
 ```
 my-app/
 ├── src/
@@ -567,6 +580,7 @@ my-app/
 ```
 
 **VS Code Settings:**
+
 ```json
 {
   "mcp.servers": {
@@ -635,6 +649,7 @@ Add these to your `keybindings.json`:
 **Cause:** The server path is incorrect or Node.js is not found.
 
 **Solution:**
+
 1. Verify the path in settings.json
 2. Check that the server is built: `npx nx build @ai-capabilities-suite/mcp-server`
 3. Test the server manually: `node packages/mcp-server/dist/src/index.js`
@@ -644,6 +659,7 @@ Add these to your `keybindings.json`:
 **Cause:** Source maps not configured or file paths don't match.
 
 **Solution:**
+
 1. For TypeScript, ensure `"sourceMap": true` in tsconfig.json
 2. Use `--enable-source-maps` flag when starting Node.js
 3. Verify file paths are absolute
@@ -653,6 +669,7 @@ Add these to your `keybindings.json`:
 **Cause:** Process is not paused or scope is incorrect.
 
 **Solution:**
+
 1. Ensure the process is paused at a breakpoint
 2. Check that you're in the correct stack frame
 3. Use the Debug Console to manually evaluate expressions
@@ -662,6 +679,7 @@ Add these to your `keybindings.json`:
 **Cause:** MCP integration not enabled or configured.
 
 **Solution:**
+
 1. Enable MCP in Copilot settings
 2. Verify the debugger server is in the allowed servers list
 3. Restart VS Code
@@ -681,11 +699,13 @@ Add these to your `keybindings.json`:
 To create a full VS Code extension:
 
 1. **Generate extension:**
+
    ```bash
    yo code
    ```
 
 2. **Add MCP client:**
+
    ```bash
    npm install @modelcontextprotocol/sdk
    ```
@@ -694,6 +714,7 @@ To create a full VS Code extension:
    - See workflow examples above
 
 4. **Add debug adapter:**
+
    ```typescript
    vscode.debug.registerDebugAdapterDescriptorFactory('mcp-debugger', {
      createDebugAdapterDescriptor(session) {
@@ -703,11 +724,13 @@ To create a full VS Code extension:
    ```
 
 5. **Package extension:**
+
    ```bash
    vsce package
    ```
 
 6. **Publish to marketplace:**
+
    ```bash
    vsce publish
    ```

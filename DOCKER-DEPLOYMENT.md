@@ -1,6 +1,6 @@
 # Docker Deployment Guide
 
-This guide covers deploying the MCP Debugger Server using Docker for containerized environments.
+This guide covers deploying the MCP ACS Debugger Server using Docker for containerized environments.
 
 ## Table of Contents
 
@@ -504,9 +504,9 @@ deploy:
 
 For issues and questions:
 
-- GitHub Issues: https://github.com/digital-defiance/ai-capabilities-suite/issues
-- Email: info@digitaldefiance.org
-- Documentation: https://github.com/digital-defiance/ai-capabilities-suite
+- GitHub Issues: <https://github.com/digital-defiance/ai-capabilities-suite/issues>
+- Email: <info@digitaldefiance.org>
+- Documentation: <https://github.com/digital-defiance/ai-capabilities-suite>
 
 ## License
 

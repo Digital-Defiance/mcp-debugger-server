@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * CLI entry point for the MCP Debugger Server
+ * CLI entry point for the MCP ACS Debugger Server
  *
  * This script provides a command-line interface for starting the MCP debugger server
  * with various configuration options.
@@ -9,11 +9,11 @@
 
 import { startMcpDebuggerServer } from "./lib/mcp-server.js";
 
-const VERSION = "1.5.21";
+const VERSION = "1.5.22";
 
 function printHelp(): void {
   console.log(`
-MCP Debugger Server v${VERSION}
+MCP ACS Debugger Server v${VERSION}
 Enterprise-grade debugging capabilities for Node.js and TypeScript applications
 
 USAGE:
@@ -59,7 +59,7 @@ https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp
 }
 
 function printVersion(): void {
-  console.log(`MCP Debugger Server v${VERSION}`);
+  console.log(`MCP ACS Debugger Server v${VERSION}`);
 }
 
 interface CliOptions {
@@ -179,7 +179,7 @@ async function main(): Promise<void> {
 
   // Log startup information
   if (logLevel === "debug" || logLevel === "info") {
-    console.error("Starting MCP Debugger Server...");
+    console.error("Starting MCP ACS Debugger Server...");
     console.error(`Version: ${VERSION}`);
     console.error(
       `Transport: ${options.stdio ? "stdio" : `TCP (${host}:${port})`}`

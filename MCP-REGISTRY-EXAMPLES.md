@@ -1,4 +1,4 @@
-# MCP Debugger Server - Usage Examples and Configuration Templates
+# MCP ACS Debugger Server - Usage Examples and Configuration Templates
 
 ## Configuration Templates
 
@@ -670,5 +670,5 @@ node --enable-source-maps dist/app.js
 - **Full Documentation**: See README.md for comprehensive documentation
 - **API Reference**: See API.md for detailed API documentation
 - **Tool Reference**: See TOOL-REFERENCE.md for complete tool reference
-- **GitHub**: https://github.com/digital-defiance/ai-capabilities-suite
-- **NPM**: https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server
+- **GitHub**: <https://github.com/digital-defiance/ai-capabilities-suite>
+- **NPM**: <https://www.npmjs.com/package/@ai-capabilities-suite/mcp-debugger-server>

@@ -1,6 +1,6 @@
-# MCP Debugger Server - Documentation Index
+# MCP ACS Debugger Server - Documentation Index
 
-Complete documentation for the MCP Debugger Server package.
+Complete documentation for the MCP ACS Debugger Server package.
 
 ## Quick Links
 
@@ -172,7 +172,7 @@ For documentation issues:
 
 - **GitHub Issues**: [Report documentation issues](https://github.com/digital-defiance/ai-capabilities-suite/issues)
 - **Pull Requests**: Submit documentation improvements
-- **Email**: info@digitaldefiance.org
+- **Email**: <info@digitaldefiance.org>
 
 ## Version Information
 

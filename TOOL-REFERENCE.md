@@ -1,4 +1,4 @@
-# MCP Debugger Server - Tool Reference
+# MCP ACS Debugger Server - Tool Reference
 
 Complete reference documentation for all 21 MCP debugging tools with schemas, examples, and debugging scenarios.
 
@@ -21,6 +21,7 @@ Complete reference documentation for all 21 MCP debugging tools with schemas, ex
 Start a new debug session with a Node.js process. The process will be paused at the start.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_start",
@@ -52,12 +53,14 @@ Start a new debug session with a Node.js process. The process will be paused at 
 ```
 
 **Parameters:**
+
 - `command` (string, required): The command to execute
 - `args` (string[], optional): Command arguments
 - `cwd` (string, optional): Working directory
 - `timeout` (number, optional): Timeout in milliseconds (default: 30000)
 
 **Example Request:**
+
 ```json
 {
   "command": "node",
@@ -68,6 +71,7 @@ Start a new debug session with a Node.js process. The process will be paused at 
 ```
 
 **Example Response (Success):**
+
 ```json
 {
   "status": "success",
@@ -78,6 +82,7 @@ Start a new debug session with a Node.js process. The process will be paused at 
 ```
 
 **Example Response (Error):**
+
 ```json
 {
   "status": "error",
@@ -87,6 +92,7 @@ Start a new debug session with a Node.js process. The process will be paused at 
 ```
 
 **Usage Notes:**
+
 - The process starts in a paused state at the first line
 - Store the returned `sessionId` for all subsequent operations
 - Use absolute paths for file arguments when possible
@@ -95,7 +101,6 @@ Start a new debug session with a Node.js process. The process will be paused at 
 
 **Requirements:** 2.1, 9.1
 
-
 ---
 
 ### 2. debugger_stop_session
@@ -103,6 +108,7 @@ Start a new debug session with a Node.js process. The process will be paused at 
 Stop a debug session, cleanup all resources, and kill the process if still running.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_stop_session",
@@ -121,9 +127,11 @@ Stop a debug session, cleanup all resources, and kill the process if still runni
 ```
 
 **Parameters:**
+
 - `sessionId` (string, required): The debug session ID
 
 **Example Request:**
+
 ```json
 {
   "sessionId": "session-abc123"
@@ -131,6 +139,7 @@ Stop a debug session, cleanup all resources, and kill the process if still runni
 ```
 
 **Example Response (Success):**
+
 ```json
 {
   "status": "success",
@@ -140,6 +149,7 @@ Stop a debug session, cleanup all resources, and kill the process if still runni
 ```
 
 **Usage Notes:**
+
 - Always call this when done debugging to prevent resource leaks
 - Safe to call even if the process has already terminated
 - Removes all breakpoints and disconnects the inspector
@@ -150,7 +160,6 @@ Stop a debug session, cleanup all resources, and kill the process if still runni
 ---
 
 ## Breakpoint Management
-
 
 ### 3. debugger_set_breakpoint
 
@@ -346,7 +355,6 @@ Detect if a process hangs or enters an infinite loop.
 
 **Requirements:** 5.1, 5.2, 5.3, 5.4, 9.1
 
-
 ---
 
 ## Debugging Scenarios
@@ -356,6 +364,7 @@ Detect if a process hangs or enters an infinite loop.
 **Goal:** Debug a simple Node.js script
 
 **Steps:**
+
 1. `debugger_start` - Start the session
 2. `debugger_set_breakpoint` - Set breakpoint at line of interest
 3. `debugger_continue` - Run to breakpoint
@@ -368,6 +377,7 @@ Detect if a process hangs or enters an infinite loop.
 **Goal:** Pause only when a specific condition is true
 
 **Steps:**
+
 1. `debugger_start` - Start the session
 2. `debugger_set_breakpoint` with condition: `{"condition": "count > 100"}`
 3. `debugger_continue` - Run until condition is met
@@ -379,6 +389,7 @@ Detect if a process hangs or enters an infinite loop.
 **Goal:** Find where code is stuck in an infinite loop
 
 **Steps:**
+
 1. `debugger_detect_hang` with timeout and sample interval
 2. Review the returned location and stack trace
 3. Fix the loop condition
@@ -388,6 +399,7 @@ Detect if a process hangs or enters an infinite loop.
 **Goal:** Debug a failing Jest test
 
 **Steps:**
+
 1. `debugger_start` with Jest command: `{"command": "node", "args": ["node_modules/.bin/jest", "test.js", "--runInBand"]}`
 2. `debugger_set_breakpoint` in test file
 3. `debugger_continue` to breakpoint
@@ -400,6 +412,7 @@ Detect if a process hangs or enters an infinite loop.
 **Goal:** Track how a variable changes during execution
 
 **Steps:**
+
 1. `debugger_start` - Start the session
 2. `debugger_add_watch` - Add variable to watch list
 3. `debugger_set_breakpoint` at multiple locations
@@ -413,6 +426,7 @@ Detect if a process hangs or enters an infinite loop.
 **Goal:** Understand the execution path leading to a point
 
 **Steps:**
+
 1. `debugger_start` - Start the session
 2. `debugger_set_breakpoint` at the point of interest
 3. `debugger_continue` - Run to breakpoint
@@ -426,6 +440,7 @@ Detect if a process hangs or enters an infinite loop.
 **Goal:** Debug TypeScript code with source maps
 
 **Steps:**
+
 1. Ensure tsconfig.json has `"sourceMap": true`
 2. `debugger_start` with `--enable-source-maps` flag
 3. `debugger_set_breakpoint` using TypeScript file path
@@ -438,6 +453,7 @@ Detect if a process hangs or enters an infinite loop.
 **Goal:** Deeply inspect a complex object
 
 **Steps:**
+
 1. `debugger_start` - Start the session
 2. `debugger_set_breakpoint` where object exists
 3. `debugger_continue` - Run to breakpoint

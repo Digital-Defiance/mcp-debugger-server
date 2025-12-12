@@ -1,6 +1,6 @@
-# MCP Debugger Server - Configuration Examples
+# MCP ACS Debugger Server - Configuration Examples
 
-This document provides comprehensive configuration examples for integrating the MCP Debugger Server with various MCP clients and AI agents.
+This document provides comprehensive configuration examples for integrating the MCP ACS Debugger Server with various MCP clients and AI agents.
 
 ## Table of Contents
 
@@ -287,7 +287,7 @@ Add to `.vscode/tasks.json`:
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Start MCP Debugger",
+      "label": "Start MCP ACS Debugger",
       "type": "shell",
       "command": "ts-mcp-server",
       "isBackground": true,
@@ -696,7 +696,7 @@ Create `/etc/systemd/system/mcp-debugger.service`:
 
 ```ini
 [Unit]
-Description=MCP Debugger Server
+Description=MCP ACS Debugger Server
 After=network.target
 
 [Service]
@@ -852,4 +852,4 @@ For configuration help:
 
 - **Documentation**: [Full documentation](https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server)
 - **Issues**: [GitHub Issues](https://github.com/digital-defiance/ai-capabilities-suite/issues)
-- **Email**: info@digitaldefiance.org
+- **Email**: <info@digitaldefiance.org>

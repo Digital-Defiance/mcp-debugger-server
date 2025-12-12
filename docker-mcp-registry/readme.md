@@ -1,4 +1,4 @@
-# TypeScript MCP Debugger
+# TypeScript MCP ACS Debugger
 
 Enterprise-grade debugging for Node.js and TypeScript applications with 25+ specialized tools.
 
@@ -6,10 +6,10 @@ Enterprise-grade debugging for Node.js and TypeScript applications with 25+ spec
 
 For complete documentation, visit:
 
-- **Main Documentation**: https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server#readme
-- **Tool Reference**: https://github.com/digital-defiance/ai-capabilities-suite/blob/main/packages/mcp-debugger-server/TOOL-REFERENCE.md
-- **AI Agent Integration**: https://github.com/digital-defiance/ai-capabilities-suite/blob/main/packages/mcp-debugger-server/AI-AGENT-INTEGRATION.md
-- **VS Code Integration**: https://github.com/digital-defiance/ai-capabilities-suite/blob/main/packages/mcp-debugger-server/VSCODE-INTEGRATION.md
+- **Main Documentation**: <https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server#readme>
+- **Tool Reference**: <https://github.com/digital-defiance/ai-capabilities-suite/blob/main/packages/mcp-debugger-server/TOOL-REFERENCE.md>
+- **AI Agent Integration**: <https://github.com/digital-defiance/ai-capabilities-suite/blob/main/packages/mcp-debugger-server/AI-AGENT-INTEGRATION.md>
+- **VS Code Integration**: <https://github.com/digital-defiance/ai-capabilities-suite/blob/main/packages/mcp-debugger-server/VSCODE-INTEGRATION.md>
 
 ## Features
 
@@ -163,9 +163,9 @@ The server provides 25 debugging tools:
 
 ## Support
 
-- **GitHub Issues**: https://github.com/digital-defiance/ai-capabilities-suite/issues
-- **Email**: info@digitaldefiance.org
-- **Documentation**: https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server
+- **GitHub Issues**: <https://github.com/digital-defiance/ai-capabilities-suite/issues>
+- **Email**: <info@digitaldefiance.org>
+- **Documentation**: <https://github.com/digital-defiance/ai-capabilities-suite/tree/main/packages/mcp-debugger-server>
 
 ## License
 
@@ -175,6 +175,6 @@ MIT License - See [LICENSE](https://github.com/digital-defiance/ai-capabilities-
 
 **Digital Defiance**
 
-- Website: https://digitaldefiance.org
-- GitHub: https://github.com/digital-defiance
-- Email: info@digitaldefiance.org
+- Website: <https://digitaldefiance.org>
+- GitHub: <https://github.com/digital-defiance>
+- Email: <info@digitaldefiance.org>

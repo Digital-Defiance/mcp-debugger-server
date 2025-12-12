@@ -9,7 +9,7 @@ import {
 } from "@ai-capabilities-suite/mcp-debugger-core";
 
 /**
- * MCP Debugger Server
+ * MCP ACS Debugger Server
  * Provides debugging capabilities for Node.js and TypeScript applications
  * through the Model Context Protocol
  */
@@ -23,7 +23,7 @@ export class McpDebuggerServer {
     this.server = new McpServer(
       {
         name: "debugger-server",
-        version: "1.5.21",
+        version: "1.5.22",
       },
       {
         capabilities: {

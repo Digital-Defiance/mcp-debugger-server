@@ -1,6 +1,6 @@
 # AI Agent Integration Guide
 
-This guide provides comprehensive instructions for integrating the MCP Debugger Server with AI agents like Kiro and Amazon Q.
+This guide provides comprehensive instructions for integrating the MCP ACS Debugger Server with AI agents like Kiro and Amazon Q.
 
 ## Table of Contents
 
@@ -12,7 +12,7 @@ This guide provides comprehensive instructions for integrating the MCP Debugger 
 
 ## Overview
 
-The MCP Debugger Server enables AI agents to debug Node.js and TypeScript applications through the Model Context Protocol. The server provides 21 comprehensive debugging tools. AI agents can:
+The MCP ACS Debugger Server enables AI agents to debug Node.js and TypeScript applications through the Model Context Protocol. The server provides 21 comprehensive debugging tools. AI agents can:
 
 - Start and manage debug sessions
 - Set and manage breakpoints (with conditions)
@@ -368,6 +368,7 @@ source maps.
 **Description:** Start a new debug session with a Node.js process.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_start",
@@ -399,6 +400,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Always use absolute paths for file arguments
 - Set appropriate timeouts based on expected execution time
 - Store the returned sessionId for subsequent operations
@@ -409,6 +411,7 @@ source maps.
 **Description:** Stop a debug session and cleanup all resources.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_stop_session",
@@ -427,6 +430,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Always call this when done debugging
 - Prevents resource leaks
 - Safe to call even if the process has already terminated
@@ -438,6 +442,7 @@ source maps.
 **Description:** Set a breakpoint at a specific file and line number.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_set_breakpoint",
@@ -456,6 +461,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Use absolute paths for reliability
 - Line numbers are 1-indexed (first line is 1)
 - Conditions are JavaScript expressions
@@ -467,6 +473,7 @@ source maps.
 **Description:** Get all breakpoints for a debug session.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_list_breakpoints",
@@ -482,6 +489,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Use this to verify breakpoints are set correctly
 - Check the `verified` field to ensure breakpoints will hit
 - Use the returned breakpointIds for remove/toggle operations
@@ -493,6 +501,7 @@ source maps.
 **Description:** Resume execution until the next breakpoint or program termination.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_continue",
@@ -508,6 +517,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Only call when the session is paused
 - Execution will continue until a breakpoint or program end
 - Listen for the response to know when execution pauses again
@@ -517,6 +527,7 @@ source maps.
 **Description:** Execute the current line and pause at the next line in the same scope.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_step_over",
@@ -532,6 +543,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Use to step through code line by line
 - Doesn't enter function calls
 - Returns the new location after stepping
@@ -541,6 +553,7 @@ source maps.
 **Description:** Execute the current line and pause at the first line inside any called function.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_step_into",
@@ -556,6 +569,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Use to investigate function calls
 - Steps into the called function
 - Returns the new location inside the function
@@ -565,6 +579,7 @@ source maps.
 **Description:** Execute until the current function returns and pause at the calling location.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_step_out",
@@ -580,6 +595,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Use to exit the current function
 - Returns to the caller
 - Useful when you've stepped into a function and want to return
@@ -591,6 +607,7 @@ source maps.
 **Description:** Evaluate a JavaScript expression in the current execution context.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_inspect",
@@ -607,6 +624,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Can evaluate any valid JavaScript expression
 - Returns value, type, and objectId (if object)
 - Use objectId with debugger_inspect_object for nested inspection
@@ -617,6 +635,7 @@ source maps.
 **Description:** Get all local variables in the current scope.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_get_local_variables",
@@ -632,6 +651,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Returns all variables in the current function scope
 - Session must be paused
 - Use to understand the current state
@@ -641,6 +661,7 @@ source maps.
 **Description:** Get global variables accessible from the current scope.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_get_global_variables",
@@ -656,6 +677,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Returns user-defined global variables
 - Built-in globals (console, process, etc.) are filtered out
 - Session must be paused
@@ -667,6 +689,7 @@ source maps.
 **Description:** Get the current call stack with function names and file locations.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_get_stack",
@@ -682,6 +705,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Returns the complete call stack
 - Frame 0 is the current location (top of stack)
 - All file paths are absolute
@@ -692,6 +716,7 @@ source maps.
 **Description:** Switch the execution context to a specific stack frame.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_switch_stack_frame",
@@ -708,6 +733,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Use to inspect variables in different stack frames
 - Frame 0 is the current location
 - Higher indices are further up the call stack
@@ -720,6 +746,7 @@ source maps.
 **Description:** Detect if a process hangs or enters an infinite loop.
 
 **Schema:**
+
 ```json
 {
   "name": "debugger_detect_hang",
@@ -739,6 +766,7 @@ source maps.
 ```
 
 **Usage Tips for AI Agents:**
+
 - Use when a script seems to hang
 - Returns the exact location of the hang
 - Provides the call stack at the hang point
@@ -753,6 +781,7 @@ source maps.
 **Cause:** The session ID is invalid or expired.
 
 **Solution:**
+
 ```
 1. Check if you stored the sessionId from debugger_start
 2. Verify the session wasn't already stopped
@@ -764,6 +793,7 @@ source maps.
 **Cause:** Trying to inspect variables while the process is running.
 
 **Solution:**
+
 ```
 1. Set a breakpoint first
 2. Call debugger_continue to run to the breakpoint
@@ -778,6 +808,7 @@ OR
 **Cause:** Breakpoint location is invalid or code path not executed.
 
 **Solution:**
+
 ```
 1. Use absolute file paths
 2. Verify the line number has executable code
@@ -790,6 +821,7 @@ OR
 **Cause:** Source maps not enabled or not found.
 
 **Solution:**
+
 ```
 1. Ensure the process is started with --enable-source-maps
 2. Verify .map files exist alongside compiled JavaScript
@@ -799,37 +831,44 @@ OR
 ### Best Practices for AI Agents
 
 1. **Always cleanup sessions:**
+
    ```
    Always call debugger_stop_session when done, even if an error occurs.
    ```
 
 2. **Use absolute paths:**
+
    ```
    Convert relative paths to absolute before calling debugger_set_breakpoint.
    ```
 
 3. **Check session state:**
+
    ```
    Before inspecting variables, ensure the session is paused.
    ```
 
 4. **Handle errors gracefully:**
+
    ```
    If a tool call fails, explain the error to the user and suggest solutions.
    ```
 
 5. **Provide context:**
+
    ```
    When showing debugging results, explain what they mean in the context
    of the user's question.
    ```
 
 6. **Be efficient:**
+
    ```
    Don't set unnecessary breakpoints or make redundant tool calls.
    ```
 
 7. **Explain your actions:**
+
    ```
    Tell the user what you're doing and why at each step.
    ```
@@ -885,24 +924,28 @@ Agent approach:
 To test your AI agent integration:
 
 1. **Basic connectivity:**
+
    ```
    Ask: "What debugging tools are available?"
    Expected: List of 17 tools
    ```
 
 2. **Simple debugging:**
+
    ```
    Ask: "Debug test-fixtures/simple-script.js"
    Expected: Session starts, breakpoint set, variables inspected
    ```
 
 3. **Error handling:**
+
    ```
    Ask: "Debug a non-existent file"
    Expected: Graceful error handling and explanation
    ```
 
 4. **Cleanup:**
+
    ```
    After debugging, verify: "Are there any active debug sessions?"
    Expected: No active sessions (all cleaned up)

@@ -90,9 +90,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: "v${{ env.NEW_VERSION }}"
-          name: "MCP Debugger Server v${{ env.NEW_VERSION }}"
+          name: "MCP ACS Debugger Server v${{ env.NEW_VERSION }}"
           body: |
-            ## MCP Debugger Server v${{ env.NEW_VERSION }}
+            ## MCP ACS Debugger Server v${{ env.NEW_VERSION }}
 
             ${{ env.CHANGELOG }}
 

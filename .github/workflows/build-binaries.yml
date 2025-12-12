@@ -129,7 +129,7 @@ jobs:
           if [ -n "$PREV_TAG" ]; then
             git log --pretty=format:"- %s (%h)" $PREV_TAG..HEAD >> CHANGELOG.md
           else
-            echo "First release of the MCP Debugger Server." >> CHANGELOG.md
+            echo "First release of the MCP ACS Debugger Server." >> CHANGELOG.md
           fi
 
           echo "" >> CHANGELOG.md
@@ -144,7 +144,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.version.outputs.tag }}
-          name: MCP Debugger Server v${{ steps.version.outputs.version }}
+          name: MCP ACS Debugger Server v${{ steps.version.outputs.version }}
           body_path: CHANGELOG.md
           files: |
             binaries/mcp-debugger-server-linux-x64.tar.gz
