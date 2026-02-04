@@ -188,7 +188,7 @@
   },
   "dependencies": {
     "@ai-capabilities-suite/mcp-debugger-core": "^1.0.16",
-    "@modelcontextprotocol/sdk": "^1.23.0",
+    "@modelcontextprotocol/sdk": "^1.26.0",
     "tslib": "^2.3.0",
     "zod": "^4.1.13"
   },
